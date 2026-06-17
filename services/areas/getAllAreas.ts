@@ -11,7 +11,7 @@ function useGetAreas() {
         setLoading(true);
         setError(null);
         try {
-            const response = await AxiosInstance.get("/api/Area/all-areies");
+            const response = await AxiosInstance.get("/api/Areas");
             
             if (response?.status === 200) {
                 setAreas(response.data);

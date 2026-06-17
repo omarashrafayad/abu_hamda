@@ -7,7 +7,7 @@ function useAddCountry() {
     const addCountry = async (data: any) => {
         setLoading(true);
         try {
-            const response = await AxiosInstance.post("/api/Countries/add-country", data);
+            const response = await AxiosInstance.post("/api/Countries", data);
             
             return response.status === 200 || response.status === 201;
         } catch (err: any) {

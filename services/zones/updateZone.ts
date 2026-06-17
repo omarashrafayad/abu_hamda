@@ -7,7 +7,7 @@ function useUpdateZone() {
     const updateZone = async (id: string | number, data: { name: string }) => {
         setLoading(true);
         try {
-            const response = await AxiosInstance.put(`/api/Zones/update-zone?id=${id}`, data);
+            const response = await AxiosInstance.put(`/api/Zones/${id}`, data);
             
             return response.status === 200 || response.status === 204;
         } catch (err: any) {

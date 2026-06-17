@@ -7,9 +7,7 @@ function useDeleteArea() {
     const deleteArea = async (id: number | string) => {
         setLoading(true);
         try {
-            const response = await AxiosInstance.delete(`/api/Area/delete-area`, {
-                params: { id }
-            });
+            const response = await AxiosInstance.delete(`/api/Areas/${id}`);
             
             return response.status === 200 || response.status === 204;
         } catch (err: any) {

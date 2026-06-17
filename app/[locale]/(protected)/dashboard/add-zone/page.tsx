@@ -68,7 +68,6 @@ const AddZonePage = () => {
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
-           
           </CardContent>
         </Card>
       </div>

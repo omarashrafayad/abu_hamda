@@ -11,7 +11,7 @@ function useGetZones() {
         setLoading(true);
         setError(null);
         try {
-            const response = await AxiosInstance.get("/api/Zones/all-zones");
+            const response = await AxiosInstance.get("/api/Zones");
             
             if (response?.status === 200) {
                 setZones(response.data);

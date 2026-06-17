@@ -7,7 +7,7 @@ function useUpdateCity() {
     const updateCity = async (id: string | number, data: { name: string; countryId: string | number }) => {
         setLoading(true);
         try {
-            const response = await AxiosInstance.put(`/api/Cities/update-city?id=${id}`, data);
+            const response = await AxiosInstance.put(`/api/Cities/${id}`, data);
             
             return response.status === 200 || response.status === 204;
         } catch (err: any) {

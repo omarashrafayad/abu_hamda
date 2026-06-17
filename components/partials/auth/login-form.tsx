@@ -19,7 +19,7 @@ import {AuthType} from "@/types/auth";
 import Cookies from "js-cookie";
 
 const schema = z.object({
-  usernameOrEmail: z.string().email({ message: "Your email is invalid." }),
+  email: z.string().email({ message: "Your email is invalid." }),
   password: z.string().min(4),
 });
 const LoginForm = () => {
@@ -43,7 +43,7 @@ const LoginForm = () => {
     resolver: zodResolver(schema),
     mode: "all",
     defaultValues: {
-      usernameOrEmail: "",
+      email: "",
       password: "",
     },
   });
@@ -74,17 +74,17 @@ const LoginForm = () => {
         </Label>
         <Input size="lg"
           disabled={isPending}
-          {...register("usernameOrEmail")}
+          {...register("email")}
           type="email"
           id="email"
           className={cn("", {
-            "border-destructive ": errors.usernameOrEmail,
+            "border-destructive ": errors.email,
           })}
         />
       </div>
-      {errors.usernameOrEmail && (
+      {errors.email && (
         <div className=" text-destructive mt-2 text-sm">
-          {errors.usernameOrEmail.message}
+          {errors.email.message}
         </div>
       )}
 

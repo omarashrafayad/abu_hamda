@@ -11,7 +11,7 @@ function useGetCities() {
         setLoading(true);
         setError(null);
         try {
-            const response = await AxiosInstance.get("/api/Cities/all-city");
+            const response = await AxiosInstance.get("/api/Cities");
             
             if (response?.status === 200) {
                 setCities(response.data);

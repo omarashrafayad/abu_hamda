@@ -27,7 +27,7 @@ const AddAreaPage = () => {
   const t = useTranslations("areas");
 
   const [name, setName] = useState("");
-  const [shippingCosts, setShippingCosts] = useState<string>("0");
+  // const [shippingCosts, setShippingCosts] = useState<string>("0");
   const [cityId, setCityId] = useState("");
   const [citySearch, setCitySearch] = useState("");
 
@@ -40,7 +40,7 @@ const AddAreaPage = () => {
   ) || [];
 
   const handleAddAreaSubmit = async () => {
-    if (!name.trim() || !cityId || shippingCosts === "") {
+    if (!name.trim() || !cityId) {
       toast.error(t("error"), { 
         description: "Please fill all required fields"
       });
@@ -49,7 +49,7 @@ const AddAreaPage = () => {
 
     const payload = {
       name: name,
-      shippingCosts: Number(shippingCosts),
+      // shippingCosts: Number(shippingCosts),
       cityId: Number(cityId),
     };
 
@@ -100,7 +100,7 @@ const AddAreaPage = () => {
               />
             </div>
 
-            <div className="flex items-center flex-wrap gap-2">
+            {/* <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="shippingCosts">
                 {t("shipping_costs")}
               </Label>
@@ -112,7 +112,7 @@ const AddAreaPage = () => {
                 value={shippingCosts}
                 onChange={(e) => setShippingCosts(e.target.value)}
               />
-            </div>
+            </div> */}
 
             <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="cityId">

@@ -32,7 +32,7 @@ const EditAreaPage = () => {
   const { cities, loading: citiesLoading, getAllCities } = useGetCities();
 
   const [name, setName] = useState("");
-  const [shippingCosts, setShippingCosts] = useState<string>("0");
+  // const [shippingCosts, setShippingCosts] = useState<string>("0");
   const [cityId, setCityId] = useState("");
   const [citySearch, setCitySearch] = useState("");
   const [fetching, setFetching] = useState(true);
@@ -41,10 +41,10 @@ const EditAreaPage = () => {
     getAllCities();
     const getAreaData = async () => {
       try {
-        const response = await AxiosInstance.get(`/api/Area/${id}`);
+        const response = await AxiosInstance.get(`/api/Areas/${id}`);
         if (response.data) {
           setName(response.data.name || "");
-          setShippingCosts(response.data.shippingCosts?.toString() || "0");
+          // setShippingCosts(response.data.shippingCosts?.toString() || "0");
           setCityId(response.data.cityId?.toString() || "");
         }
       } catch (error: any) {
@@ -62,14 +62,14 @@ const EditAreaPage = () => {
   ) || [];
 
   const handleUpdateArea = async () => {
-    if (!name.trim() || !cityId || shippingCosts === "") {
+    if (!name.trim() || !cityId) {
       toast.error(t("error"), { description: "Please fill all required fields" });
       return;
     }
 
     const payload = {
       name: name,
-      shippingCosts: Number(shippingCosts),
+      // shippingCosts: Number(shippingCosts),
       cityId: Number(cityId),
     };
 
@@ -115,7 +115,7 @@ const EditAreaPage = () => {
               />
             </div>
 
-            <div className="flex items-center flex-wrap gap-2">
+            {/* <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="shippingCosts">
                 {t("shipping_costs")}
               </Label>
@@ -127,7 +127,7 @@ const EditAreaPage = () => {
                 value={shippingCosts}
                 onChange={(e) => setShippingCosts(e.target.value)}
               />
-            </div>
+            </div> */}
 
             <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="cityId">

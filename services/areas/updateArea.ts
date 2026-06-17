@@ -4,10 +4,10 @@ import { useState } from "react";
 function useUpdateArea() {
     const [loading, setLoading] = useState(false);
 
-    const updateArea = async (id: string | number, data: { name: string; shippingCosts: number; cityId: string | number }) => {
+    const updateArea = async (id: string | number, data: { name: string; cityId: string | number }) => {
         setLoading(true);
         try {
-            const response = await AxiosInstance.put(`/api/Area/update-area?id=${id}`, data);
+            const response = await AxiosInstance.put(`/api/Areas/${id}`, data);
             
             return response.status === 200 || response.status === 204;
         } catch (err: any) {

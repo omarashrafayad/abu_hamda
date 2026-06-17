@@ -7,7 +7,7 @@ function useUpdateCountry() {
     const updateCountry = async (id: string | number, data: any) => {
         setLoading(true);
         try {
-            const response = await AxiosInstance.put(`/api/Countries/update-country?id=${id}`, data);
+            const response = await AxiosInstance.put(`/api/Countries/${id}`, data);
             return response.status === 200 || response.status === 204;
         } catch (err: any) {
             const errorMessage = err.response?.data?.message || err.message || "Update failed";

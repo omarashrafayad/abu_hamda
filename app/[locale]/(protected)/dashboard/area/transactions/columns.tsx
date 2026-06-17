@@ -14,11 +14,11 @@ export const baseColumns = ({ refresh, t }: { refresh: () => void; t: (key: stri
         header: t("area_name"),
         cell: ({ row }) => <span className="font-medium text-default-900">{row.getValue("name") || t("unknown")}</span>,
     },
-    {
-        accessorKey: "shippingCosts",
-        header: t("shipping_costs"),
-        cell: ({ row }) => <span className="font-medium text-default-900">{row.getValue("shippingCosts")}</span>,
-    },
+    // {
+    //     accessorKey: "shippingCosts",
+    //     header: t("shipping_costs"),
+    //     cell: ({ row }) => <span className="font-medium text-default-900">{row.getValue("shippingCosts")}</span>,
+    // },
     {
         accessorKey: "cityName",
         header: t("city_name"),

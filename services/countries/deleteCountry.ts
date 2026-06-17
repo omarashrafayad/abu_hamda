@@ -7,8 +7,7 @@ function useDeleteCountry() {
     const deleteCountry = async (id: number | string) => {
         setLoading(true);
         try {
-            const response = await AxiosInstance.delete(`/api/Countries/delete-country`, {
-                params: { id }
+            const response = await AxiosInstance.delete(`/api/Countries/${id}`, {
             });
             
             return response.status === 200 || response.status === 204;

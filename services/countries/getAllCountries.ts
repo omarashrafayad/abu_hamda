@@ -11,7 +11,7 @@ function useGetCountries() {
         setLoading(true);
         setError(null);
         try {
-            const response = await AxiosInstance.get("/api/Countries/all-countries");
+            const response = await AxiosInstance.get("/api/Countries");
             
             if (response?.status === 200) {
                 setCountries(response.data);

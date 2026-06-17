@@ -7,9 +7,7 @@ function useDeleteCity() {
     const deleteCity = async (id: number | string) => {
         setLoading(true);
         try {
-            const response = await AxiosInstance.delete(`/api/Cities/delete-city`, {
-                params: { id }
-            });
+            const response = await AxiosInstance.delete(`/api/Cities/${id}`);
             
             return response.status === 200 || response.status === 204;
         } catch (err: any) {

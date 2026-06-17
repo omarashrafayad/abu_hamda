@@ -7,7 +7,7 @@ function useAddZone() {
     const addZone = async (data: { name: string }) => {
         setLoading(true);
         try {
-            const response = await AxiosInstance.post("/api/Zones/add-zone", data);
+            const response = await AxiosInstance.post("/api/Zones", data);
             
             return response.status === 200 || response.status === 201;
         } catch (err: any) {

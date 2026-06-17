@@ -7,9 +7,7 @@ function useDeleteZone() {
     const deleteZone = async (id: number | string) => {
         setLoading(true);
         try {
-            const response = await AxiosInstance.delete(`/api/Zones/delete-zone`, {
-                params: { id }
-            });
+            const response = await AxiosInstance.delete(`/api/Zones/${id}`);
             
             return response.status === 200 || response.status === 204;
         } catch (err: any) {

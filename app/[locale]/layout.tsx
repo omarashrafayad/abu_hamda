@@ -13,7 +13,7 @@ import DirectionProvider from "@/providers/direction-provider";
 import AuthProvider from "@/providers/auth.provider";
 
 export const metadata: Metadata = {
-  title: "DENTZONE",
+  title: "abu hamda",
   icons: {
     icon: "/LOGO.png",
   }

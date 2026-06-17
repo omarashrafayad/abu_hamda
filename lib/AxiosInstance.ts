@@ -7,7 +7,7 @@ import axios, {
 import Cookies from "js-cookie";
 
 const AxiosInstance = axios.create({
-    baseURL: 'https://dentzoneapi.runasp.net/',
+    baseURL: 'http://abuhamdaapi.runasp.net/',
 });
 
 AxiosInstance.interceptors.request.use(
@@ -47,7 +47,8 @@ AxiosInstance.interceptors.response.use(
     },
     async (error: AxiosError) => {
         const status = error.response?.status;
-        if ([401, 403].includes(status ?? 0)) {
+        const url = error.config?.url || "";
+        if ([401, 403].includes(status ?? 0) && !url.includes("/api/Auth/login")) {
             // await AsyncStorage.removeItem('Token');
             Cookies.remove('authToken');
             Cookies.remove('userRole');
