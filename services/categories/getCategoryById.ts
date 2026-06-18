@@ -12,7 +12,7 @@ function useGetCategoryById() {
         })
 
     const gettingCategoryById = async (id: string | string[] | undefined) => {
-       await AxiosInstance.get(`/api/Categories/${id}?lang=3`).then((response) => {
+       await AxiosInstance.get(`/api/Categories/${id}`).then((response) => {
            if (response.status === 200 || response.data !== null) {
                setCategory(response.data)
            }

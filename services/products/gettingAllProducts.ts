@@ -14,7 +14,6 @@ function useGettingAllProducts() {
   const [search, setSearch] = useState<string>("");
 
   const abortControllerRef = useRef<AbortController | null>(null);
-  // 
 
   const lastParamsRef = useRef({
     includeDeleted: "false",
@@ -49,7 +48,7 @@ function useGettingAllProducts() {
     // 
 
     try {
-      const response = await AxiosInstance.get(`/api/Products/GetProducts`, {
+      const response = await AxiosInstance.get(`/api/Products`, {
         params: {
           includeDeleted,
           page,
@@ -72,15 +71,24 @@ function useGettingAllProducts() {
       }
 
       if (response.status === 200 || response.status === 201) {
-        if (!response.data || !response.data.data) {
+        if (!response.data) {
           setProducts([]);
           setTotalItems(0);
           setTotalPages(1);
           return;
         }
 
-        setProducts([...response.data.data]); 
-        setTotalItems(response.data.totalItems || response.data.data.length);
+        // Support both direct array response and wrapped data property
+        const dataArray = Array.isArray(response.data) ? response.data : response.data.data;
+        if (!dataArray) {
+          setProducts([]);
+          setTotalItems(0);
+          setTotalPages(1);
+          return;
+        }
+
+        setProducts([...dataArray]); 
+        setTotalItems(response.data.totalItems || dataArray.length);
         setTotalPages(response.data.totalPages || 1);
         setCurrentPage(page);
         setIncludeDeletedState(includeDeleted);

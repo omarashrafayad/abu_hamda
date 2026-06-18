@@ -11,7 +11,7 @@ const Logo = () => {
         alt=""
         width={300}
         height={300}
-        className=" w-36 xl:full"
+        className=" w-65 xl:full"
       />
     </div>
   );

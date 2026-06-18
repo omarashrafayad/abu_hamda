@@ -11,7 +11,7 @@ function useGetBrandById() {
         setLoading(true);
         setError(null);
         try {
-            const response = await AxiosInstance.get(`/api/Brands/brnadbyId/${id}`);
+            const response = await AxiosInstance.get(`/api/Brands/${id}`);
             
             if (response?.status === 200) {
                 setBrand(response.data);

@@ -24,13 +24,9 @@ const EditCategory = () => {
   const { category, gettingCategoryById, loading: categoryLoading } = useGetCategoryById();
   const { updatingCategoryById, loading: updatingCategoryLoading } = useUpdateCategoryById();
 
-  const [name, setName] = useState("");
-  const [arabicName, setArabicName] = useState("");
-  const [pref, setPref] = useState("");
-  const [orderNum, setOrderNum] = useState<number>(0);
-  const [description, setDescription] = useState("");
+  const [Name, setName] = useState("");
   // const [companyPercentage, setCompanyPercentage] = useState("");
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [CategoryImage, setImageFile] = useState<File | null>(null);
 
   useEffect(() => {
     if (id) gettingCategoryById(id);
@@ -39,11 +35,6 @@ const EditCategory = () => {
   useEffect(() => {
     if (category) {
       setName(category.name || "");
-      setArabicName(category.arabicName || "");
-      setPref(category.pref || "");
-      setOrderNum(category.orderNum || 0);
-      setDescription(category.description || "");
-      // setCompanyPercentage(category.companyPercentage || "");
     }
   }, [category]);
 
@@ -54,21 +45,16 @@ const EditCategory = () => {
   };
 
   const updateCategory = async () => {
-    if (!name.trim() || !arabicName.trim() || !pref.trim() || !description.trim()) {
+    if (!Name.trim() ) {
       toast.error(t("validationError"), { description: t("fill_all_fields") });
       return;
     }
 
     const formData = new FormData();
-    formData.append("Name", name);
-    formData.append("ArabicName", arabicName);
-    formData.append("Pref", pref);
-    formData.append("OrderNum", orderNum.toString());
-    formData.append("Description", description);
-    // formData.append("CompanyPercentage", companyPercentage);
+    formData.append("Name", Name);
     
-    if (imageFile) {
-      formData.append("ImageFile", imageFile);
+    if (CategoryImage) {
+      formData.append("CategoryImage", CategoryImage);
     }
 
     const { success, error } = await (updatingCategoryById as any)(id, formData);
@@ -102,7 +88,7 @@ const EditCategory = () => {
           </CardHeader>
 
           <CardContent className="space-y-6">
-            <div className="flex items-center flex-wrap gap-2">
+            {/* <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="category-arabic-name">
                 {t("category_arabic_name")}
               </Label>
@@ -113,7 +99,7 @@ const EditCategory = () => {
                 value={arabicName}
                 onChange={(e) => setArabicName(e.target.value)}
               />
-            </div>
+            </div> */}
 
             <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="category-name">
@@ -123,12 +109,12 @@ const EditCategory = () => {
                 id="category-name"
                 className="flex-1 min-w-[300px]"
                 placeholder={t("category_name")}
-                value={name}
+                value={Name}
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
 
-            <div className="flex items-center flex-wrap gap-2">
+            {/* <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="category-pref">
                 {t("pref")}
               </Label>
@@ -139,8 +125,8 @@ const EditCategory = () => {
                 value={pref}
                 onChange={(e) => setPref(e.target.value)}
               />
-            </div>
-            <div className="flex items-center flex-wrap gap-2">
+            </div> */}
+            {/* <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="category-order">
                 {t("order")}
               </Label>
@@ -152,9 +138,9 @@ const EditCategory = () => {
                 value={orderNum}
                 onChange={(e) => setOrderNum(parseInt(e.target.value) || 0)}
               />
-            </div>
+            </div> */}
 
-            <div className="flex items-start flex-wrap gap-2">
+            {/* <div className="flex items-start flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium mt-3" htmlFor="category-description">
                 {t("description")}
               </Label>
@@ -165,7 +151,7 @@ const EditCategory = () => {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
-            </div>
+            </div> */}
         {/* <div className="flex items-center flex-wrap gap-2">
   <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="companyPercentage">
     {t("company_percentage")}
@@ -201,12 +187,12 @@ const EditCategory = () => {
                 </Button>
                 
                 <span className="text-sm text-muted-foreground truncate">
-                  {imageFile ? imageFile.name : "No file chosen"}
+                  {CategoryImage ? CategoryImage.name : "No file chosen"}
                 </span>
 
                 <input
                   ref={fileInputRef}
-                  id="imageFile"
+                  id="CategoryImage"
                   type="file"
                   accept="image/*"
                   onChange={handleFileChange}

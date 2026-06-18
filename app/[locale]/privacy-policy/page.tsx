@@ -7,8 +7,8 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | DENTZONE",
-  description: "Privacy Policy for DENTZONE platform",
+  title: "Privacy Policy | Abu hamda",
+  description: "Privacy Policy for Abu hamda platform",
 };
 
 interface PrivacyPolicyProps {
@@ -81,13 +81,13 @@ export default async function PrivacyPolicyPage({
           <div className="bg-primary/5 py-8 px-6 md:px-10 border-b border-slate-200 dark:border-slate-800">
             <div className="flex flex-col items-center gap-4">
               <div className="w-16 h-16 bg-white dark:bg-slate-800 rounded-2xl shadow-sm flex items-center justify-center p-2 border border-slate-100 dark:border-slate-700">
-                <img src="/LOGO.png" alt="DENTZONE Logo" className="w-full h-full object-contain" />
+                <img src="/LOGO.png" alt="abu hamda Logo" className="w-full h-full object-contain" />
               </div>
               <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white text-center">
                 {isRtl ? "سياسة الخصوصية" : "Privacy Policy"}
               </h1>
               <p className="text-slate-500 dark:text-slate-400 text-sm text-center">
-                {isRtl ? "منصة DENTZONE" : "DENTZONE Platform"}
+                {isRtl ? "منصة Abu hamda" : "Abu hamda Platform"}
               </p>
             </div>
           </div>
@@ -100,7 +100,7 @@ export default async function PrivacyPolicyPage({
           {/* Footer Section */}
           <div className="bg-slate-50 dark:bg-slate-900/50 py-8 px-10 border-t border-slate-200 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500">
             <div>
-              {isRtl ? "© ٢٠٢٤ DENTZONE. جميع الحقوق محفوظة." : "© 2024 DENTZONE. All rights reserved."}
+              {isRtl ? "© ٢٠٢٤ Abu hamda. جميع الحقوق محفوظة." : "© 2024 Abu hamda. All rights reserved."}
             </div>
             <div className="flex items-center gap-4">
               <span>{isRtl ? "آخر تحديث: " : "Last Updated: "}{formattedDate}</span>

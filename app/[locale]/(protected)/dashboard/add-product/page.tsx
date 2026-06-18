@@ -22,48 +22,40 @@ import useCreateProduct from "@/services/products/createProduct";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
+import GetSubCategories from "@/services/subcategories/getSubCategories";
 
 const AddProduct = () => {
   const t = useTranslations("productList");
   const router = useRouter();
 
-  const [name, setName] = useState<string>("");
-  const [arabicName, setArabicName] = useState<string>("");
-  const [preef, setPref] = useState<string>("");
-  const [arabicPreef, setArabicPreef] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [arabicDescription, setArabicDescription] = useState<string>("");
-  const [categoryId, setCategoryId] = useState<string>("");
+  const [Name, setName] = useState<string>("");
+  const [Description, setDescription] = useState<string>("");
+  const [SubCategoryId, setSubCategoryId] = useState<string>("");
   const [brandId, setBrandId] = useState<string>("");
-  const [isPopular, setIsPopular] = useState<boolean>(false);
-  const [revenuePercentage, setRevenuePercentage] = useState<string>("");
-  const [orderNum, setOrderNum] = useState<string>("");
-  
-  const [photos, setPhotos] = useState<File[]>([]);
-  
-  const [categorySearch, setCategorySearch] = useState<string>("");
+  const [ProductImage, setProductImage] = useState<File[]>([]);
+  const [Price, setPrice] = useState<number>(0);
+  const [SubCategorySearch, setSubCategorySearch] = useState<string>("");
   const [filteredCategories, setFilteredCategories] = useState<any[]>([]);
-
   const [brandSearch, setBrandSearch] = useState<string>("");
   const [filteredBrands, setFilteredBrands] = useState<any[]>([]);
 
-  const { loading: gettingAllCatLoading, data: categoriesData, gettingAllCategories } = GetCategories();
+  const { loading: gettingAllSubCatLoading, data: subCategoriesData, gettingAllSubCategories } = GetSubCategories();
   const { loading: gettingBrandsLoading, brands, getAllBrands } = useGetBrands();
   const { createProduct, loading: creatingProductLoading } = useCreateProduct();
 
   useEffect(() => {
-    gettingAllCategories();
+    gettingAllSubCategories();
     getAllBrands();
   }, []);
 
   useEffect(() => {
-    if (categoriesData) {
-      const filtered = categoriesData.filter((category: any) =>
-        category.name.toLowerCase().includes(categorySearch.toLowerCase())
+    if (subCategoriesData) {
+      const filtered = subCategoriesData.filter((category: any) =>
+        category.name.toLowerCase().includes(SubCategorySearch.toLowerCase())
       );
       setFilteredCategories(filtered);
     }
-  }, [categorySearch, categoriesData]);
+  }, [SubCategorySearch, subCategoriesData]);
 
   useEffect(() => {
     if (brands) {
@@ -77,40 +69,30 @@ const AddProduct = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
-      setPhotos((prev) => [...prev, ...newFiles]);
+      setProductImage((prev) => [...prev, ...newFiles]);
     }
   };
 
   const removePhoto = (index: number) => {
-    setPhotos((prev) => prev.filter((_, i) => i !== index));
+    setProductImage((prev) => prev.filter((_, i) => i !== index));
   };
 
   const onSubmit = async () => {
-    if (!name.trim() || !categoryId || !brandId) {
+    if (!Name.trim() || !SubCategoryId || !brandId) {
       toast.error(t("fillRequiredFields"));
       return;
     }
 
     const formData = new FormData();
-    formData.append("Name", name);
-    formData.append("ArabicName", arabicName);
-    formData.append("Preef", preef);
-    formData.append("ArabicPreef", arabicPreef);
-    formData.append("Description", description);
-    formData.append("ArabicDescription", arabicDescription);
-    formData.append("CategoryId", categoryId);
+    formData.append("Name", Name);
+    formData.append("Description", Description);
+    formData.append("SubCategoryId", SubCategoryId);
     formData.append("BrandId", brandId);
-    formData.append("IsPopular", isPopular.toString());
-    formData.append("RevenuePercentage", revenuePercentage);
-    formData.append("OrderNum", orderNum);
+    formData.append("Price", Price.toString());
     
-    photos.forEach((file) => {
-      formData.append("Photos", file);
+    ProductImage.forEach((file) => {
+      formData.append("ProductImage", file);
     });
-    if (photos.length > 0) {
-      formData.append("ImageName", photos[0].name);
-    }
-
     try {
       const success = await createProduct(formData);
       if (success) {
@@ -122,7 +104,7 @@ const AddProduct = () => {
     }
   };
 
-  if (gettingAllCatLoading || gettingBrandsLoading) {
+  if (gettingAllSubCatLoading || gettingBrandsLoading) {
     return (
       <div className="h-screen flex items-center justify-center">
         <Loader2 className="animate-spin" size={40} />
@@ -142,15 +124,19 @@ const AddProduct = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex items-center gap-2">
                 <Label className="w-[120px]">{t("productName")}</Label>
-                <Input value={name} onChange={(e) => setName(e.target.value)} />
+                <Input value={Name} onChange={(e) => setName(e.target.value)} />
               </div>
-              <div className="flex items-center gap-2">
+              <div>
+                <Label className="w-[120px]">Price</Label>
+                <Input value={Price} onChange={(e) => setPrice(Number(e.target.value))} />
+              </div>
+              {/* <div className="flex items-center gap-2">
                 <Label className="w-[120px]">{t("ArabicName")}</Label>
-                <Input value={arabicName} onChange={(e) => setArabicName(e.target.value)} />
-              </div>
+                <Input value={ArabicName} onChange={(e) => setArabicName(e.target.value)} />
+              </div> */}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex items-center gap-2">
                 <Label className="w-[120px]">{t("productPref")}</Label>
                 <Input value={preef} onChange={(e) => setPref(e.target.value)} />
@@ -159,18 +145,18 @@ const AddProduct = () => {
                 <Label className="w-[120px]">Arabic Preef</Label>
                 <Input value={arabicPreef} onChange={(e) => setArabicPreef(e.target.value)} />
               </div>
-            </div>
+            </div> */}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex items-center gap-2">
                 <Label className="w-[120px]">{t("category")}</Label>
-                <Select onValueChange={(value) => setCategoryId(value)}>
+                <Select onValueChange={(value) => setSubCategoryId(value)}>
                   <SelectTrigger className="flex-1">
                     <SelectValue placeholder={t("selectCategoryPlaceholder")} />
                   </SelectTrigger>
                   <SelectContent>
                     <div className="px-2 py-1">
-                      <Input placeholder={t("searchCategory")} onChange={(e) => setCategorySearch(e.target.value)} />
+                      <Input placeholder={t("searchCategory")} onChange={(e) => setSubCategorySearch(e.target.value)} />
                     </div>
                     <SelectGroup>
                       {filteredCategories.map((category: any) => (
@@ -189,7 +175,7 @@ const AddProduct = () => {
                   </SelectTrigger>
                   <SelectContent>
                     <div className="px-2 py-1">
-                      <Input 
+                      <Input
                         placeholder={t("searchBrand")} 
                         onChange={(e) => setBrandSearch(e.target.value)} 
                       />
@@ -204,7 +190,7 @@ const AddProduct = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex items-center gap-2">
                 <Label className="w-[120px]">Revenue Percentage (%)</Label>
                 <Input type="number" value={revenuePercentage} onChange={(e) => setRevenuePercentage(e.target.value)} />
@@ -213,7 +199,7 @@ const AddProduct = () => {
                 <Label className="w-[120px]">{t("orderNum")}</Label>
                 <Input type="number" value={orderNum} onChange={(e) => setOrderNum(e.target.value)} />
               </div>
-            </div>
+            </div> */}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex flex-col gap-2">
@@ -227,9 +213,9 @@ const AddProduct = () => {
                   />
                 </div>
             
-                {photos.length > 0 && (
+                {ProductImage.length > 0 && (
                   <div className="flex flex-wrap gap-2 mt-2 ml-[120px]">
-                    {photos.map((file, index) => (
+                    {ProductImage.map((file, index) => (
                       <div key={index} className="relative group bg-slate-100 p-1 rounded border">
                         <span className="text-xs truncate max-w-[100px] block">{file.name}</span>
                         <button 
@@ -247,14 +233,14 @@ const AddProduct = () => {
 
             <div className="space-y-2">
               <Label>{t("description")}</Label>
-              <Textarea value={description} onChange={(e) => setDescription(e.target.value)} />
+              <Textarea value={Description} onChange={(e) => setDescription(e.target.value)} />
             </div>
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <Label>Arabic Description</Label>
               <Textarea value={arabicDescription} onChange={(e) => setArabicDescription(e.target.value)} />
-            </div>
+            </div> */}
 
-            <div className="flex items-center gap-2 pt-4">
+            {/* <div className="flex items-center gap-2 pt-4">
               <Switch 
                 id="isPopular" 
                 checked={isPopular} 
@@ -263,7 +249,7 @@ const AddProduct = () => {
               <Label htmlFor="isPopular" className="cursor-pointer font-semibold">
                 {t("isPopular")}
               </Label>
-            </div>
+            </div> */}
 
           </CardContent>
         </Card>

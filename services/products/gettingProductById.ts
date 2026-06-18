@@ -10,7 +10,7 @@ function useGettingProductById() {
     const getProductById = async (id: string | string[] | undefined) => {
         setLoading(true);
         setError(null);
-        await AxiosInstance.get(`/api/Products/${id}?lang=3`).then((res) => {
+        await AxiosInstance.get(`/api/Products/${id}`).then((res) => {
             if (res.status === 200 || res.status === 201 || !res.data.errors) {
                 setProduct(res.data);
             } else {

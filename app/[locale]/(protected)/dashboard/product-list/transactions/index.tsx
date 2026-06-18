@@ -124,7 +124,7 @@ const TransactionsTable = () => {
           />
         </div>
 
-        {isAdmin || ispreparationrepresentative && (
+        {/* {isAdmin || ispreparationrepresentative && ( */}
           <div className="flex items-center gap-2 flex-wrap">
             <Link href="/dashboard/add-product">
               <Button size="md" variant="outline" className="gap-2">
@@ -140,7 +140,7 @@ const TransactionsTable = () => {
               }}
             />
           </div>
-        )}
+        {/* )} */}
       </div>
 
       {loading ? (

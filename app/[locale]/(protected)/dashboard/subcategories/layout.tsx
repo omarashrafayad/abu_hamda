@@ -1,11 +1,15 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Abu hamda",
-  description: "Abu hamda Dashboard",
-};
+  title: 'Subcategories',
+  description: 'Subcategories List Page'
+}
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+    </>
+  );
 };
 
 export default Layout;

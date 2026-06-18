@@ -23,15 +23,13 @@ const EditBrand = () => {
 
   const { updateBrand, loading: updatingLoading } = useUpdateBrand();
 
-  const [name, setName] = useState("");
-  const [arabicName, setArabicName] = useState("");
-  const [isPopular, setIsPopular] = useState(false);
-  const [photo, setPhoto] = useState<File | null>(null);
+  const [Name, setName] = useState("");
+  const [LogoFile, setLogoFile] = useState<File | null>(null);
   const [fetching, setFetching] = useState(true);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setPhoto(e.target.files[0]);
+      setLogoFile(e.target.files[0]);
     }
   };
 
@@ -39,11 +37,9 @@ const EditBrand = () => {
     const getBrandData = async () => {
       try {
         // ملاحظة: تأكد من صحة الإملاء 'brnadbyId' إذا كان السيرفر يتطلب ذلك فعلاً
-        const response = await AxiosInstance.get(`/api/Brands/brnadbyId/${id}`);
+        const response = await AxiosInstance.get(`/api/Brands/${id}`);
         if (response.data) {
           setName(response.data.name || "");
-          setArabicName(response.data.arName || "");
-          setIsPopular(response.data.isPopular || false);
         }
       } catch (error: any) {
         toast.error(t("error_fetching_brand"));
@@ -56,17 +52,15 @@ const EditBrand = () => {
   }, [id, t]);
 
   const handleUpdateBrand = async () => {
-    if (!name.trim() || !arabicName.trim()) {
+    if (!Name.trim() ) {
       toast.error(t("validationError"), { description: t("fill_all_fields") });
       return;
     }
 
     const formData = new FormData();
-    formData.append("brandName", name);
-    formData.append("brandArName", arabicName);
-    formData.append("IsPopular", isPopular.toString());
-    if (photo) {
-      formData.append("imageFile", photo);
+    formData.append("Name", Name);
+    if (LogoFile) {
+      formData.append("LogoFile", LogoFile);
     }
 
     try {
@@ -106,12 +100,12 @@ const EditBrand = () => {
                 id="brand-name"
                 className="flex-1 min-w-[300px]"
                 placeholder={t("brand_name")}
-                value={name}
+                value={Name}
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
 
-            <div className="flex items-center flex-wrap gap-2">
+            {/* <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="brand-arabic-name">
                 {t("brand_arabic_name")}
               </Label>
@@ -122,7 +116,7 @@ const EditBrand = () => {
                 value={arabicName}
                 onChange={(e) => setArabicName(e.target.value)}
               />
-            </div>
+            </div> */}
 
             <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="brand-photo">
@@ -137,7 +131,7 @@ const EditBrand = () => {
               />
             </div>
 
-            <div className="flex items-center gap-2 pt-4">
+            {/* <div className="flex items-center gap-2 pt-4">
               <Switch 
                 id="isPopular" 
                 checked={isPopular} 
@@ -146,7 +140,7 @@ const EditBrand = () => {
               <Label htmlFor="isPopular" className="cursor-pointer font-semibold">
                 {t("isPopular") || "Is Popular"}
               </Label>
-            </div>
+            </div> */}
           </CardContent>
         </Card>
       </div>

@@ -7,7 +7,7 @@ function GetCategories() {
 
     const gettingAllCategories = async () => {
         setLoading(true)
-        await AxiosInstance.get('/api/Categories?lang=3').then((response) => {
+        await AxiosInstance.get('/api/Categories').then((response) => {
             if (response.data.length > 0) {
                 setData(response.data)
             }

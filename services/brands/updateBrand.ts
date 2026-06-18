@@ -7,7 +7,7 @@ function useUpdateBrand() {
     const updateBrand = async (id: string, formData: FormData) => {
         setLoading(true);
         try {
-            const response = await AxiosInstance.put(`/api/Brands/update-brand?id=${id}`, formData, {
+            const response = await AxiosInstance.put(`/api/Brands/${id}`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },

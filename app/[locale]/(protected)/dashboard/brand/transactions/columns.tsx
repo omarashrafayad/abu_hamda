@@ -12,10 +12,10 @@ import Image from "next/image";
 
 export const baseColumns = ({ refresh, t }: { refresh: () => void; t: (key: string) => string }): ColumnDef<BrandType>[] => [
     {
-        accessorKey: "imagePath",
+        accessorKey: "logoUrl",
         header: t("brand_image") || "Image",
         cell: ({ row }) => {
-            const imageUrl = row.getValue("imagePath") as string;
+            const imageUrl = row.getValue("logoUrl") as string;
             return (
                 <div className="relative w-12 h-12 overflow-hidden rounded-md border border-default-200">
                     {imageUrl ? (
@@ -40,23 +40,23 @@ export const baseColumns = ({ refresh, t }: { refresh: () => void; t: (key: stri
         header: t("brand name"),
         cell: ({ row }) => <span>{row.getValue("name") || t("unknown")}</span>,
     },
-  {
-        accessorKey: "arName", 
-        header: t("brand arabic name"),
-        cell: ({ row }) => {
-            const value = row.getValue("arName") as string;
-            return <span>{value || t("unknown")}</span>;
-        },
-    },
-    {
-        accessorKey: "isPopular",
-        header: t("popular") || "Popular",
-        cell: ({ row }) => (
-            <span className={`px-2 py-1 rounded-full text-xs font-semibold ${row.original.isPopular ? "bg-success/20 text-success" : "bg-red-500 text-white"}`}>
-                {row.original.isPopular ? "yes" : "No"}
-            </span>
-        ),
-    },
+//   {
+//         accessorKey: "arName", 
+//         header: t("brand arabic name"),
+//         cell: ({ row }) => {
+//             const value = row.getValue("arName") as string;
+//             return <span>{value || t("unknown")}</span>;
+//         },
+//     },
+    // {
+    //     accessorKey: "isPopular",
+    //     header: t("popular") || "Popular",
+    //     cell: ({ row }) => (
+    //         <span className={`px-2 py-1 rounded-full text-xs font-semibold ${row.original.isPopular ? "bg-success/20 text-success" : "bg-red-500 text-white"}`}>
+    //             {row.original.isPopular ? "yes" : "No"}
+    //         </span>
+    //     ),
+    // },
     {
         id: "actions",
         accessorKey: "action",

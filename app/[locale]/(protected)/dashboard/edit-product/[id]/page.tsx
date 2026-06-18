@@ -14,10 +14,10 @@ import { toast } from "sonner";
 import { Loader2, Upload, FileImage, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Cookies from "js-cookie";
-
 import useGettingProductById from "@/services/products/gettingProductById";
 import GetCategories from "@/services/categories/getCategories";
 import useUpdateProductById from "@/services/products/UpdateProductById";
+import GetSubCategories from "@/services/subcategories/getSubCategories";
 
 const EditProduct = () => {
   const t = useTranslations("productList");
@@ -30,45 +30,31 @@ const EditProduct = () => {
   const isInventory = userRole?.toLowerCase() === "inventory";
 
   const { getProductById, product, loading } = useGettingProductById();
-  const { data: categories, gettingAllCategories, loading: catsLoading } = GetCategories();
+  const { data: subCategories, gettingAllSubCategories, loading: catsLoading } = GetSubCategories();
   const { updatingProductById, loading: updateLoading } = useUpdateProductById();
 
   const [formData, setFormData] = useState({
-    name: "",
-    arabicName: "",
-    pref: "",
-    arabicPreef: "",
-    description: "",
-    arabicDescription: "",
-    categoryId: "",
-    revenuePercentage: "",
-    images: [] as File[],
-    isPopular: false,
-    orderNum: "",
-    existingImages: [] as string[],
-    imageToDelete: [] as string[],
+    Name: "",
+    Description: "",
+    SubCategoryId: "",
+    ProductImage: [] as File[],
+    Price: "",
+    BrandId: "",
   });
 
   useEffect(() => {
-    gettingAllCategories();
+    gettingAllSubCategories();
     if (productId) getProductById(productId);
   }, [productId]);
 useEffect(() => {
   if (product) {
     setFormData({
-      name: product.productName || "",
-      arabicName: product.productArabicName || "",
-      pref: product.preef || "",
-      arabicPreef: product.arabicPreef || "",
-      description: product.description || "",
-      arabicDescription: product.arabicDescription || "",
-      categoryId: product.categoryId ? String(product.categoryId) : "",
-      revenuePercentage: product.revenuePercentage ? String(product.revenuePercentage) : "",
-      images: [],
-      isPopular: product.isPopular || false,
-      orderNum: product.orderNum ? String(product.orderNum) : "",
-      existingImages: Array.isArray(product.images) ? product.images : [],
-      imageToDelete: [],
+      Name: product.productName || "",
+      Description: product.description || "",
+      SubCategoryId: product.subCategoryId ? String(product.subCategoryId) : "",
+      ProductImage: [],
+      Price: product.price ? String(product.price) : "",
+      BrandId: product.brandId ? String(product.brandId) : "",
     });
   }
 }, [product]);
@@ -78,7 +64,7 @@ useEffect(() => {
       const newFiles = Array.from(e.target.files);
       setFormData((prev) => ({
         ...prev,
-        images: [...prev.images, ...newFiles],
+        ProductImage: [...prev.ProductImage, ...newFiles],
       }));
     }
   };
@@ -86,37 +72,26 @@ useEffect(() => {
   const removeNewImage = (index: number) => {
     setFormData((prev) => ({
       ...prev,
-      images: prev.images.filter((_, i) => i !== index),
+      ProductImage: prev.ProductImage.filter((_, i) => i !== index),
     }));
   };
 
   const handleUpdate = async () => {
-    if (!formData.name || !formData.categoryId) {
+    if (!formData.Name || !formData.SubCategoryId) {
       toast.error(t("fill_all_fields"));
       return;
     }
 
     const data = new FormData();
-    data.append("Name", formData.name);
-    data.append("ArabicName", formData.arabicName);
-    data.append("Preef", formData.pref);
-    data.append("ArabicPreef", formData.arabicPreef);
-    data.append("Description", formData.description);
-    data.append("ArabicDescription", formData.arabicDescription);
-    data.append("CategoryId", formData.categoryId);
-    data.append("RevenuePercentage", formData.revenuePercentage);
-    data.append("IsPopular", formData.isPopular.toString());
-    data.append("OrderNum", formData.orderNum);
+    data.append("Name", formData.Name);
+    data.append("Description", formData.Description);
+    data.append("SubCategoryId", formData.SubCategoryId);
+    data.append("BrandId", formData.BrandId);
+    data.append("Price", formData.Price);
 
-    if (formData.images.length > 0) {
-      formData.images.forEach((file) => {
-        data.append("Photos", file);
-      });
-    }
-
-    if (formData.imageToDelete.length > 0) {
-      formData.imageToDelete.forEach((fileName) => {
-        data.append("ImageToDelete", fileName);
+    if (formData.ProductImage.length > 0) {
+      formData.ProductImage.forEach((file) => {
+        data.append("ProductImage", file);
       });
     }
 
@@ -152,13 +127,13 @@ useEffect(() => {
               <Label className="w-[180px] flex-none text-sm font-medium">{t("productName")}</Label>
               <Input 
                 className="flex-1 min-w-[300px]"
-                value={formData.name} 
-                onChange={(e) => setFormData({...formData, name: e.target.value})} 
+                value={formData.Name} 
+                onChange={(e) => setFormData({...formData, Name: e.target.value})} 
                 disabled={isInventory}
               />
             </div>
 
-            <div className="flex items-center flex-wrap gap-2">
+            {/* <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium">{t("arabicName")}</Label>
               <Input 
                 className="flex-1 min-w-[300px]"
@@ -166,9 +141,9 @@ useEffect(() => {
                 onChange={(e) => setFormData({...formData, arabicName: e.target.value})} 
                 disabled={isInventory}
               />
-            </div>
+            </div> */}
 
-            <div className="flex items-center flex-wrap gap-2">
+            {/* <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium">{t("productPref")}</Label>
               <Input 
                 className="flex-1 min-w-[300px]"
@@ -176,9 +151,9 @@ useEffect(() => {
                 onChange={(e) => setFormData({...formData, pref: e.target.value})} 
                 disabled={isInventory}
               />
-            </div>
+            </div> */}
 
-            <div className="flex items-center flex-wrap gap-2">
+            {/* <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium">{t("arabicPreef")}</Label>
               <Input 
                 className="flex-1 min-w-[300px]"
@@ -186,27 +161,27 @@ useEffect(() => {
                 onChange={(e) => setFormData({...formData, arabicPreef: e.target.value})} 
                 disabled={isInventory}
               />
-            </div>
+            </div> */}
 
             <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium">{t("category")}</Label>
               <Select 
-                value={formData.categoryId} 
-                onValueChange={(val) => setFormData({...formData, categoryId: val})}
+                value={formData.SubCategoryId} 
+                onValueChange={(val) => setFormData({...formData, SubCategoryId: val})}
                 disabled={isInventory}
               >
                 <SelectTrigger className="flex-1 min-w-[300px]">
                   <SelectValue placeholder={t("selectCategory")} />
                 </SelectTrigger>
                 <SelectContent>
-                  {categories.map((cat: any) => (
+                  {subCategories.map((cat: any) => (
                     <SelectItem key={cat.id} value={String(cat.id)}>{cat.name}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
 
-            <div className="flex items-center flex-wrap gap-2">
+            {/* <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium">{t("revenuePercentage")}</Label>
               <Input 
                 type="number"
@@ -214,16 +189,15 @@ useEffect(() => {
                 value={formData.revenuePercentage} 
                 onChange={(e) => setFormData({...formData, revenuePercentage: e.target.value})} 
               />
-            </div>
+            </div> */}
 
             <div className="flex items-center flex-wrap gap-2">
-              <Label className="w-[180px] flex-none text-sm font-medium">{t("orderNum")}</Label>
+              <Label className="w-[180px] flex-none text-sm font-medium">{t("price")}</Label>
               <Input 
                 type="number"
                 className="flex-1 min-w-[300px]"
-                value={formData.orderNum} 
-                onChange={(e) => setFormData({...formData, orderNum: e.target.value})} 
-                disabled={isInventory}
+                value={formData.Price} 
+                onChange={(e) => setFormData({...formData, Price: e.target.value})} 
               />
             </div>
 
@@ -231,13 +205,13 @@ useEffect(() => {
               <Label className="w-[180px] flex-none text-sm font-medium mt-3">{t("description")}</Label>
               <Textarea 
                 className="flex-1 min-w-[300px]"
-                value={formData.description} 
-                onChange={(e) => setFormData({...formData, description: e.target.value})} 
+                value={formData.Description} 
+                onChange={(e) => setFormData({...formData, Description: e.target.value})} 
                 disabled={isInventory}
               />
             </div>
 
-            <div className="flex items-start flex-wrap gap-2">
+            {/* <div className="flex items-start flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium mt-3">{t("arabicDescription")}</Label>
               <Textarea 
                 className="flex-1 min-w-[300px]"
@@ -245,9 +219,9 @@ useEffect(() => {
                 onChange={(e) => setFormData({...formData, arabicDescription: e.target.value})} 
                 disabled={isInventory}
               />
-            </div>
+            </div> */}
 
-            <div className="flex items-center gap-2 pt-4">
+            {/* <div className="flex items-center gap-2 pt-4">
               <Switch 
                 id="isPopular" 
                 checked={formData.isPopular} 
@@ -257,13 +231,13 @@ useEffect(() => {
               <Label htmlFor="isPopular" className="cursor-pointer font-semibold">
                 {t("isPopular")}
               </Label>
-            </div>
+            </div> */}
 
-            {formData.existingImages.length > 0 && (
+            {/* {formData.ProductImage.length > 0 && (
               <div className="flex items-start flex-wrap gap-2">
                 <Label className="w-[180px] flex-none text-sm font-medium mt-2">Current Photos</Label>
                 <div className="flex flex-wrap gap-2">
-                  {formData.existingImages.map((url, idx) => (
+                  {formData.ProductImage.map((url, idx) => (
                     <div key={idx} className="relative w-24 h-24 border rounded-md overflow-hidden bg-muted group">
                       <img src={url} alt="product" className="w-full h-full object-cover" />
                       <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -273,8 +247,8 @@ useEffect(() => {
                             const fileName = url.split('/').pop() || url;
                             setFormData(prev => ({
                               ...prev,
-                              existingImages: prev.existingImages.filter(img => img !== url),
-                              imageToDelete: [...prev.imageToDelete, fileName]
+                              ProductImage: prev.ProductImage.filter(img => img !== url),
+                              imageToDelete: [...prev.ProductImage, fileName]
                             }));
                           }}
                           className="bg-destructive text-white p-1 rounded-full hover:bg-destructive/90 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -288,7 +262,7 @@ useEffect(() => {
                   ))}
                 </div>
               </div>
-            )}
+            )} */}
 
             <div className="flex items-start flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium mt-2">{t("productPhoto")}</Label>
@@ -314,9 +288,9 @@ useEffect(() => {
                   />
                 </div>
 
-                {formData.images.length > 0 && (
+                {formData.ProductImage.length > 0 && (
                   <div className="flex flex-wrap gap-2">
-                    {formData.images.map((file, index) => (
+                    {formData.ProductImage.map((file, index) => (
                       <div key={index} className="relative w-24 h-24 border rounded-md group">
                         <img 
                           src={URL.createObjectURL(file)} 

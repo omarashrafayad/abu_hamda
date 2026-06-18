@@ -17,19 +17,17 @@ const AddBrandPage = () => {
   const router = useRouter();
   const t = useTranslations("brands");
 
-  const [name, setName] = useState("");
-  const [arabicName, setArabicName] = useState("");
-  const [isPopular, setIsPopular] = useState(false);
-  const [imagePath, setImagePath] = useState<File | null>(null);
+  const [Name, setName] = useState("");
+  const [LogoFile, setLogoFile] = useState<File | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setImagePath(e.target.files[0]);
+      setLogoFile(e.target.files[0]);
     }
   };
 
   const handleAddBrandSubmit = async () => {
-    if (!name.trim() || !arabicName.trim() || !imagePath) {
+    if (!Name.trim() ||  !LogoFile) {
       toast.error(t("validationError"), { 
         description: t("fill_required_fields_and_photo") || "Please fill all fields and select a photo"
       });
@@ -37,10 +35,8 @@ const AddBrandPage = () => {
     }
 
     const formData = new FormData();
-    formData.append("brandName", name);
-    formData.append("brandArName", arabicName);
-    formData.append("IsPopular", isPopular.toString());
-    formData.append("imageFile", imagePath);
+    formData.append("Name", Name);
+    formData.append("LogoFile", LogoFile);
 
     try {
       const success = await addBrand(formData);
@@ -76,23 +72,12 @@ const AddBrandPage = () => {
                 id="brandName"
                 className="flex-1 min-w-[300px]"
                 placeholder={t("brand name")}
-                value={name}
+                value={Name}
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
             
-            <div className="flex items-center flex-wrap gap-2">
-              <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="brandArabicName">
-                {t("brand arabic name")}
-              </Label>
-              <Input
-                id="brandArabicName"
-                className="flex-1 min-w-[300px]"
-                placeholder={t("brand arabic name")}
-                value={arabicName}
-                onChange={(e) => setArabicName(e.target.value)}
-              />
-            </div>
+           
 
             <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="brandPhoto">
@@ -107,7 +92,7 @@ const AddBrandPage = () => {
               />
             </div>
 
-            <div className="flex items-center gap-2 pt-4">
+            {/* <div className="flex items-center gap-2 pt-4">
               <Switch 
                 id="isPopular" 
                 checked={isPopular} 
@@ -116,7 +101,7 @@ const AddBrandPage = () => {
               <Label htmlFor="isPopular" className="cursor-pointer font-semibold">
                 {t("isPopular") || "Is Popular"}
               </Label>
-            </div>
+            </div> */}
            
           </CardContent>
         </Card>

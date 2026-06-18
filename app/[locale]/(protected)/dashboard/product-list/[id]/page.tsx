@@ -29,14 +29,32 @@ export default function ProductDetailsPage() {
       <div className="p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold dark:text-card-foreground text-slate-800">
-            {isArabic ? product.productArabicName : product.productName}
+            {product.name || (isArabic ? product.productArabicName : product.productName)}
           </h1>
-          <div className="flex gap-4 mt-1">
-            <p className="text-slate-700 text-[13px] font-mono uppercase tracking-wider dark:text-default-600 ">Product ID: {product.productId}</p>
+          <div className="flex flex-wrap gap-4 mt-2 items-center">
+            <p className="text-slate-700 text-[13px] font-mono uppercase tracking-wider dark:text-default-600">
+              Product ID: {product.id || product.productId}
+            </p>
+            {product.productCode && (
+              <p className="text-blue-600 text-[13px] font-bold uppercase tracking-wider bg-blue-50 px-2 py-0.5 rounded dark:bg-slate-800 dark:text-blue-400">
+                Code: {product.productCode}
+              </p>
+            )}
+            {product.brandName && (
+              <p className="text-purple-600 text-[13px] font-bold uppercase tracking-wider bg-purple-50 px-2 py-0.5 rounded dark:bg-slate-800 dark:text-purple-400">
+                Brand: {product.brandName}
+              </p>
+            )}
           </div>
-                      <p className="text-blue-600 text-[13px] font-bold uppercase tracking-wider  px-2 py-0.5 rounded">Code: {product.productCode}</p>
-
         </div>
+        {(product.price !== undefined || (product.prices && product.prices.length > 0)) && (
+          <div className="text-right">
+            <p className="text-sm text-slate-700 font-bold dark:text-default-600">Price</p>
+            <p className="text-3xl font-extrabold text-blue-600 dark:text-blue-400">
+              {product.price !== undefined ? `${product.price}` : `${product.prices?.[0]?.salesPrice}`}
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -45,9 +63,9 @@ export default function ProductDetailsPage() {
         <div className="lg:col-span-1 space-y-6">
           <div className="dark:text-card-foreground p-4 rounded-2xl shadow-sm border border-slate-200">
             <div className="aspect-square bg-slate-50 rounded-xl flex items-center justify-center border border-dashed border-slate-200 overflow-hidden">
-              {product.images && product.images.length > 0 ? (
+              {product.imageUrl || (product.images && product.images.length > 0) ? (
                 <img 
-                  src={product.images[0]} 
+                  src={product.imageUrl || (Array.isArray(product.images) ? product.images[0] : product.images)} 
                   alt="product" 
                   className="object-contain w-full h-full hover:scale-105 transition-transform duration-300" 
                 />
@@ -70,7 +88,9 @@ export default function ProductDetailsPage() {
                 <div>
                   <p className="text-[9px] text-slate-700 font-bold uppercase dark:text-white">Created At</p>
                   <p className="text-xs text-slate-700 font-bold dark:text-default-600">
-                    {new Date(product.createdAt).toLocaleDateString()} - {new Date(product.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                    {product.createdAt
+                      ? `${new Date(product.createdAt).toLocaleDateString()} - ${new Date(product.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
+                      : "N/A"}
                   </p>
                 </div>
               </div>
@@ -98,12 +118,14 @@ export default function ProductDetailsPage() {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div className="space-y-6 text-sm">
-                  <div>
-                    <label className="text-[13px] font-black dark:text-white text-slate-700">Preface</label>
-                    <p className=" dark:text-default-600 text-slate-700 leading-relaxed ">
-                      {product.preef || "No preface available."}
-                    </p>
-                  </div>
+                  {product.preef && (
+                    <div>
+                      <label className="text-[13px] font-black dark:text-white text-slate-700">Preface</label>
+                      <p className=" dark:text-default-600 text-slate-700 leading-relaxed ">
+                        {product.preef}
+                      </p>
+                    </div>
+                  )}
                   <div>
                     <label className="text-[13px] font-black text-slate-700 dark:text-white">Description</label>
                     <p className="text-slate-700 leading-relaxed dark:text-default-600">
@@ -112,20 +134,26 @@ export default function ProductDetailsPage() {
                   </div>
                 </div>
 
-                <div className="space-y-6 text-sm text-right" dir="rtl">
-                  <div>
-                    <label className="text-[13px] font-black text-slate-700 dark:text-white">الوصف المختصر</label>
-                    <p className="text-slate-700 leading-relaxed dark:text-default-600">
-                      {product.arabicPreef || "غير متوفر"}
-                    </p>
+                {(product.arabicPreef || product.arabicDescription) && (
+                  <div className="space-y-6 text-sm text-right" dir="rtl">
+                    {product.arabicPreef && (
+                      <div>
+                        <label className="text-[13px] font-black text-slate-700 dark:text-white">الوصف المختصر</label>
+                        <p className="text-slate-700 leading-relaxed dark:text-default-600">
+                          {product.arabicPreef}
+                        </p>
+                      </div>
+                    )}
+                    {product.arabicDescription && (
+                      <div>
+                        <label className="text-[13px] font-black text-slate-700 dark:text-white">الوصف الكامل</label>
+                        <p className="text-slate-700 leading-relaxed dark:text-default-600">
+                          {product.arabicDescription}
+                        </p>
+                      </div>
+                    )}
                   </div>
-                  <div>
-                    <label className="text-[13px] font-black text-slate-700 dark:text-white">الوصف الكامل</label>
-                    <p className="text-slate-700 leading-relaxed dark:text-default-600">
-                      {product.arabicDescription || "غير متوفر"}
-                    </p>
-                  </div>
-                </div>
+                )}
               </div>
             </div>
 
@@ -146,21 +174,23 @@ export default function ProductDetailsPage() {
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-xs font-bold text-slate-800 truncate dark:text-white">
-                        {isArabic ? product.category?.arabicName : product.category?.name}
+                        {product.subCategoryName || (isArabic ? product.category?.arabicName : product.category?.name) || "Unknown"}
                     </p>
-                    <p className="text-[9px] text-slate-700 font-mono truncate dark:text-default-600">{product.categoryId}</p>
+                    <p className="text-[9px] text-slate-700 font-mono truncate dark:text-default-600">ID: {product.subCategoryId || product.categoryId || "N/A"}</p>
                   </div>
                 </div>
-                <div className="flex gap-2 mt-4">
-                  <div className="dark:bg-card flex-1 bg-slate-50 p-2 rounded-lg border border-slate-100">
-                    <p className="text-[8px] text-slate-700 uppercase font-bold dark:text-white">Company %</p>
-                    <p className="text-[11px] font-bold text-blue-600">{product.category?.companyPercentage ?? 0}%</p>
+                {product.category && (
+                  <div className="flex gap-2 mt-4">
+                    <div className="dark:bg-card flex-1 bg-slate-50 p-2 rounded-lg border border-slate-100">
+                      <p className="text-[8px] text-slate-700 uppercase font-bold dark:text-white">Company %</p>
+                      <p className="text-[11px] font-bold text-blue-600">{product.category?.companyPercentage ?? 0}%</p>
+                    </div>
+                    <div className="dark:bg-card flex-1 bg-slate-50 p-2 rounded-lg border border-slate-100">
+                      <p className="text-[8px] text-slate-700 uppercase font-bold dark:text-white">Pref</p>
+                      <p className="text-[11px] font-bold text-slate-700 truncate dark:text-default-600">{product.category?.pref || "General"}</p>
+                    </div>
                   </div>
-                  <div className="dark:bg-card flex-1 bg-slate-50 p-2 rounded-lg border border-slate-100">
-                    <p className="text-[8px] text-slate-700 uppercase font-bold dark:text-white">Pref</p>
-                    <p className="text-[11px] font-bold text-slate-700 truncate dark:text-default-600">{product.category?.pref || "General"}</p>
-                  </div>
-                </div>
+                )}
               </div>
 
               {/* Provider / Inventory List */}

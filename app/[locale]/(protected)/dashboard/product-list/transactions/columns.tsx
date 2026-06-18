@@ -5,7 +5,6 @@ import { ProductType } from "@/types/product";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import Cookies from "js-cookie";
-import { useLocale } from "next-intl";
 import useDeleteProductById from "@/services/products/deleteProductById";
 
 const ActionCell = ({
@@ -23,6 +22,8 @@ const ActionCell = ({
   const isPreparationRepresentative = userRole === "Preparation representative";
   const isInventory = userRole?.toLowerCase() === "inventory";
   const { loading, deleteProductById } = useDeleteProductById();
+  console.log(row.original.name)
+  console.log("omar");
 
   const handleDelete = (id: string) => {
     const toastId = toast(t("warning"), {
@@ -59,7 +60,7 @@ const ActionCell = ({
   return (
     <div className="flex items-center gap-2">
       {/* زر العرض - View Details */}
-      {isAdmin && (
+      {/* {isAdmin && ( */}
         <Link
           href={`/dashboard/product-list/${row.original.id}`}
           className="p-2 text-primary bg-primary/10 rounded-full hover:bg-primary hover:text-white transition-all"
@@ -67,10 +68,10 @@ const ActionCell = ({
         >
           <Eye className="w-4 h-4" />
         </Link>
-      )}
+      {/* )} */}
 
       {/* زر التعديل - Edit */}
-      {(isAdmin || isInventory || isPreparationRepresentative) && (
+      {/* {(isAdmin || isInventory || isPreparationRepresentative) && ( */}
         <Link
           href={`/dashboard/edit-product/${row.original.id}`}
           className="p-2 text-info bg-info/10 rounded-full hover:bg-info hover:text-white transition-all"
@@ -78,10 +79,10 @@ const ActionCell = ({
         >
           <SquarePen className="w-4 h-4" />
         </Link>
-      )}
+      {/* )} */}
 
       {/* زر الحذف - Delete */}
-      {isAdmin && (
+      {/* {isAdmin && ( */}
         <button
           onClick={() => row.original.id && handleDelete(row.original.id)}
           className="p-2 text-destructive bg-destructive/10 rounded-full hover:bg-destructive hover:text-white transition-all"
@@ -89,7 +90,7 @@ const ActionCell = ({
         >
           <Trash2 className="w-4 h-4" />
         </button>
-      )}
+      {/* )} */}
     </div>
   );
 };
@@ -97,13 +98,13 @@ const ActionCell = ({
 export const baseColumns = ({
   refresh,
   t,
+  locale,
 }: {
   refresh: () => void;
   t: (key: string) => string;
   locale: string;
 }): ColumnDef<ProductType>[] => {
   const userRole = Cookies.get("userRole");
-  const locale = useLocale();
   const isArabic = locale === "ar";
 
   const columns: ColumnDef<ProductType>[] = [
@@ -111,13 +112,13 @@ export const baseColumns = ({
       accessorKey: "images",
       header: isArabic ? "الصورة" : "Image",
       cell: ({ row }) => {
-        const hasImage = row.original.images && row.original.images.length > 0;
+        const hasImage = !!row.original.imageUrl;
         return (
           <div className="w-12 h-12 rounded-md overflow-hidden border border-default-200 flex items-center justify-center bg-slate-50">
             {hasImage ? (
               <img 
-                src={row.original.images[0]} 
-                alt={isArabic ? row.original.productArabicName : row.original.productName} 
+                src={row.original.imageUrl} 
+                alt={row.original.name || (isArabic ? row.original.productArabicName : row.original.productName)} 
                 className="w-full h-full object-cover"
               />
             ) : (
@@ -128,79 +129,71 @@ export const baseColumns = ({
       },
     },
     {
-      accessorKey: isArabic ? "productArabicName" : "productName",
-      header: isArabic ? "اسم المنتج" : "Product Name",
+      accessorKey: "name",
+      header: "name",
       cell: ({ row }) => {
-        const name = isArabic
-          ? row.original.productArabicName
-          : row.original.productName;
         return (
-          <span className="text-sm font-medium">{name || t("unknown")}</span>
+          <span className="text-sm font-medium">{row.original.name || t("unknown")}</span>
         );
       },
     },
     {
-      accessorKey: "productCode",
-      header: isArabic ? "كود المنتج" : "Product Code",
+      accessorKey: "description",
+      header: "Description",
       cell: ({ row }) => (
-        <span className="text-sm">{row.original.productCode}</span>
+        <span className="text-sm">{row.original.description}</span>
       ),
     },
     {
-      accessorKey: isArabic ? "arabicPreef" : "preef",
-      header: isArabic ? "الوصف" : "Product Pref",
+      accessorKey: "price",
+      header:"Price",
       cell: ({ row }) => (
         <span className="text-sm">
-          {(isArabic ? row.original.arabicPreef : row.original.preef) || "-"}
+       {row.original.price}
         </span>
       ),
     },
     {
-      accessorKey: "category",
-      header: isArabic ? "الفئة" : "Category",
+      accessorKey: "subCategoryName",
+      header:  "subCategoryName",
       cell: ({ row }) => {
-        const categoryName = isArabic
-          ? row.original.category?.arabicName
-          : row.original.category?.name;
         return (
-          <span className="text-sm">{categoryName || t("unknown")}</span>
+          <span className="text-sm">{row.original.subCategoryName || t("unknown")}</span>
         );
       },
     },
     {
-      accessorKey: "orderNum",
-      header: t("orderNum"),
+      accessorKey: "brandName",
+      header: "brandName",
       cell: ({ row }) => (
         <span className="text-sm">
-          {row.original.orderNum !== undefined && row.original.orderNum !== null
-            ? row.original.orderNum
-            : "-"}
+          {row.original.brandName || t("unknown")}
         </span>
       ),
     },
-    {
-      accessorKey: "revenuePercentage",
-      header: t("revenuePercentage"),
-      cell: ({ row }) => (
-        <span className="text-sm">
-          {row.original.revenuePercentage !== undefined && row.original.revenuePercentage !== null
-            ? `${row.original.revenuePercentage}%`
-            : "-"}
-        </span>
-      ),
-    },
-    {
-      accessorKey: "isPopular",
-      header: isArabic ? "شائع" : "Popular",
-      cell: ({ row }) => (
-        <span className={`px-2 py-1 rounded-full text-xs font-semibold ${row.original.isPopular ? "bg-success/20 text-success" : "bg-red-500 text-white"}`}>
-          {row.original.isPopular ? t("yes") : t("no")}
-        </span>
-      ),
-    },
+    // {
+    //   accessorKey: "revenuePercentage",
+    //   header: t("revenuePercentage"),
+    //   cell: ({ row }) => (
+    //     <span className="text-sm">
+    //       {row.original.revenuePercentage !== undefined && row.original.revenuePercentage !== null
+    //         ? `${row.original.revenuePercentage}%`
+    //         : "-"}
+    //     </span>
+    //   ),
+    // },
+    // {
+    //   accessorKey: "isPopular",
+    //   header: isArabic ? "شائع" : "Popular",
+    //   cell: ({ row }) => (
+    //     <span className={`px-2 py-1 rounded-full text-xs font-semibold ${row.original.isPopular ? "bg-success/20 text-success" : "bg-red-500 text-white"}`}>
+    //       {row.original.isPopular ? t("yes") : t("no")}
+    //     </span>
+    //   ),
+    // },
   ];
 
-  if (userRole === "Admin" || userRole?.toLowerCase() === "inventory" || userRole === "Preparation representative") {
+  // if (userRole === "Admin" || userRole?.toLowerCase() === "inventory" || userRole === "Preparation representative") {
     columns.push({
       id: "actions",
       header: isArabic ? "الإجراءات" : "Actions",
@@ -208,7 +201,7 @@ export const baseColumns = ({
         <ActionCell row={row} refresh={refresh} t={t} userRole={userRole} />
       ),
     });
-  }
+  // }
 
   return columns;
 };

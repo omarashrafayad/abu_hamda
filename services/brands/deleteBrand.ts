@@ -7,9 +7,7 @@ function useDeleteBrand() {
     const deleteBrand = async (id: number | string) => {
         setLoading(true);
         try {
-            const response = await AxiosInstance.delete(`/api/Brands/delete-brand`, {
-                params: { id }
-            });
+            const response = await AxiosInstance.delete(`/api/Brands/${id}`);
             
             return response.status === 200 || response.status === 204;
         } catch (err: any) {

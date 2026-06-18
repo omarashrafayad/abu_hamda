@@ -10,7 +10,7 @@ function useGetBrands() {
         setLoading(true);
         setError(null);
         try {
-            const response = await AxiosInstance.get("/api/Brands/all-brands");
+            const response = await AxiosInstance.get("/api/Brands");
             
             if (response?.status === 200) {
                 setBrands(response.data);

@@ -7,7 +7,7 @@ function useAddBrand() {
     const addBrand = async (formData: FormData) => {
         setLoading(true);
         try {
-            const response = await AxiosInstance.post("/api/Brands/add-brand", formData, {
+            const response = await AxiosInstance.post("/api/Brands", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },

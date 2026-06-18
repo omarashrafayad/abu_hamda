@@ -18,36 +18,31 @@ const AddCategory = () => {
   const t = useTranslations("categories");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [name, setName] = useState("");
-  const [arabicName, setArabicName] = useState("");
-  const [pref, setPref] = useState("");
-  const [orderNum, setOrderNum] = useState<number>(0);
-  const [description, setDescription] = useState("");
-  // const [companyPercentage, setCompanyPercentage] = useState("");
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [Name, setName] = useState("");
+  const [CategoryImage, setCategoryImage] = useState<File | null>(null);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setImageFile(e.target.files[0]);
+      setCategoryImage(e.target.files[0]);
     }
   };
 
   const addCategory = async () => {
-    if (!name.trim() || !arabicName.trim() || !pref.trim() || !description.trim()) {
+    if (!Name.trim()) {
       toast.error(t("validationError"), { description: t("fill_all_fields") });
       return;
     }
 
     const formData = new FormData();
-    formData.append("Name", name);
-    formData.append("ArabicName", arabicName);
-    formData.append("Pref", pref);
-    formData.append("OrderNum", orderNum.toString());
-    formData.append("Description", description);
+    formData.append("Name", Name);
+    // formData.append("ArabicName", arabicName);
+    // formData.append("Pref", pref);
+    // formData.append("OrderNum", orderNum.toString());
+    // formData.append("Description", description);
     // formData.append("CompanyPercentage", companyPercentage);
     
-    if (imageFile) {
-      formData.append("ImageFile", imageFile);
+    if (CategoryImage) {
+      formData.append("CategoryImage", CategoryImage);
     }
 
     try {
@@ -76,7 +71,7 @@ const AddCategory = () => {
 
           <CardContent className="space-y-6">
             
-            <div className="flex items-center flex-wrap gap-2">
+            {/* <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="categoryArabicName">
                 {t("category_arabic_name")}
               </Label>
@@ -87,7 +82,7 @@ const AddCategory = () => {
                 value={arabicName}
                 onChange={(e) => setArabicName(e.target.value)}
               />
-            </div>
+            </div> */}
 
             <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="categoryName">
@@ -97,12 +92,12 @@ const AddCategory = () => {
                 id="categoryName"
                 className="flex-1 min-w-[300px]"
                 placeholder={t("category_name")}
-                value={name}
+                value={Name}
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
 
-            <div className="flex items-center flex-wrap gap-2">
+            {/* <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="categoryPref">
                 {t("pref")}
               </Label>
@@ -113,8 +108,8 @@ const AddCategory = () => {
                 value={pref}
                 onChange={(e) => setPref(e.target.value)}
               />
-            </div>
-            <div className="flex items-center flex-wrap gap-2">
+            </div> */}
+            {/* <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="categoryOrder">
                 {t("order")}
               </Label>
@@ -126,9 +121,9 @@ const AddCategory = () => {
                 value={orderNum}
                 onChange={(e) => setOrderNum(parseInt(e.target.value) || 0)}
               />
-            </div>
+            </div> */}
 
-            <div className="flex items-start flex-wrap gap-2">
+            {/* <div className="flex items-start flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium mt-3" htmlFor="categoryDescription">
                 {t("description")}
               </Label>
@@ -139,7 +134,7 @@ const AddCategory = () => {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
-            </div>
+            </div> */}
 
               {/* <div className="flex items-center flex-wrap gap-2">
   <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="companyPercentage">
@@ -176,7 +171,7 @@ const AddCategory = () => {
                 </Button>
                 
                 <span className="text-sm text-muted-foreground truncate">
-                  {imageFile ? imageFile.name : "No file chosen"}
+                  {CategoryImage ? CategoryImage.name : "No file chosen"}
                 </span>
 
                 <input

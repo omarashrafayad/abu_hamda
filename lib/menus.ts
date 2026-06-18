@@ -95,6 +95,14 @@ export function getMenuList(pathname: string, t: any, permissions: string[] = []
               // permission: "Permissions.Category.View",
             },
             {
+              href: "/dashboard/subcategories",
+              label: t("subcategories"),
+              active: pathname === "/dashboard/subcategories",
+              children: [],
+              icon: "",
+              // permission: "Permissions.SubCategory.View",
+            },
+            {
               href: "/dashboard/brand",
               label: t("brands"),
               active: pathname === "/dashboard/brand",
