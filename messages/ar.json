@@ -136,6 +136,7 @@
     "Providers details": "تفاصيل الموردون",
     "Doctors details": "تفاصيل الأطباء  ",
     "brands": "العلامات التجارية",
+    "units": "الوحدات",
     "dashboard": "لوحة التحكم",
     "analytics": "تحليلات",
     "orders": "الطلبات",
@@ -1191,5 +1192,29 @@
     "recipientsList": "قائمة المستلمين",
     "recipientsCountDescription": "المستخدمين الذين تلقوا هذا الإشعار:",
     "close": "إغلاق"
+  },
+  "units": {
+    "units": "الوحدات",
+    "add_unit": "إضافة وحدة",
+    "edit_unit": "تعديل وحدة",
+    "delete_unit": "حذف وحدة",
+    "confirmDelete": "هل أنت متأكد من حذف هذه الوحدة؟",
+    "unitName": "اسم الوحدة",
+    "unit_information": "بيانات الوحدة",
+    "name": "الاسم",
+    "actions": "العمليات",
+    "successAdd": "تم إضافة الوحدة بنجاح",
+    "successUpdate": "تم تعديل الوحدة بنجاح",
+    "successDelete": "تم حذف الوحدة بنجاح",
+    "errorAdd": "فشل إضافة الوحدة",
+    "errorUpdate": "فشل تعديل الوحدة",
+    "errorDelete": "فشل حذف الوحدة",
+    "errorFetch": "فشل جلب الوحدات",
+    "confirm": "تأكيد",
+    "cancel": "إلغاء",
+    "noResults": "لا يوجد وحدات.",
+    "searchPlaceholder": "البحث عن الوحدات...",
+    "validationError": "خطأ في التحقق",
+    "fill_required_fields": "يرجى كتابة اسم الوحدة"
   }
 }

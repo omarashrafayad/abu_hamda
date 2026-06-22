@@ -138,6 +138,7 @@
     "Providers details": "Providers details",
     "Doctors details": "Doctors details",
     "brands": "Brands",
+    "units": "Units",
     "dashboard": "Dashboard",
     "analytics": "Analytics",
     "orders": "Orders",
@@ -1193,5 +1194,29 @@
     "recipientsList": "Recipients List",
     "recipientsCountDescription": "Users who received this notification:",
     "close": "Close"
+  },
+  "units": {
+    "units": "Units",
+    "add_unit": "Add Unit",
+    "edit_unit": "Edit Unit",
+    "delete_unit": "Delete Unit",
+    "confirmDelete": "Are you sure you want to delete this unit?",
+    "unitName": "Unit Name",
+    "unit_information": "Unit Information",
+    "name": "Name",
+    "actions": "Actions",
+    "successAdd": "Unit added successfully",
+    "successUpdate": "Unit updated successfully",
+    "successDelete": "Unit deleted successfully",
+    "errorAdd": "Failed to add unit",
+    "errorUpdate": "Failed to update unit",
+    "errorDelete": "Failed to delete unit",
+    "errorFetch": "Failed to fetch units",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "noResults": "No units found.",
+    "searchPlaceholder": "Search units...",
+    "validationError": "Validation Error",
+    "fill_required_fields": "Please fill in the unit name"
   }
 }
