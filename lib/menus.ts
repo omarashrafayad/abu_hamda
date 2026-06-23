@@ -127,6 +127,14 @@ export function getMenuList(pathname: string, t: any, permissions: string[] = []
               // permission: "Permissions.ProductUnit.View",
             },
             {
+              href: "/dashboard/stock-products",
+              label: t("stockProducts"),
+              active: pathname === "/dashboard/stock-products",
+              children: [],
+              icon: "",
+              // permission: "Permissions.StockProduct.View",
+            },
+            {
                 href: "/dashboard/banners",
                 label: t("ads"),
                 active: pathname.includes("/dashboard/banners") || pathname.includes("/dashboard/special-offers"),
