@@ -7,7 +7,7 @@ import axios, {
 import Cookies from "js-cookie";
 
 const AxiosInstance = axios.create({
-    baseURL: 'http://abuhamdaapi.runasp.net/',
+    baseURL: 'https://abuhamdaapi.runasp.net/',
 });
 
 AxiosInstance.interceptors.request.use(
