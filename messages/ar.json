@@ -1272,6 +1272,7 @@
     "validationError": "خطأ في التحقق",
     "fill_required_fields": "يرجى كتابة كافة البيانات المطلوبة",
     "productUnit": "وحدة المنتج",
+    "expiryDate": "تاريخ الانتهاء",
     "save": "حفظ"
   }
 }

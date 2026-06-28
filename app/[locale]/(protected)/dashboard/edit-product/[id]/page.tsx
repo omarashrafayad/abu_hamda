@@ -90,9 +90,13 @@ useEffect(() => {
     data.append("Price", formData.Price);
 
     if (formData.ProductImage.length > 0) {
-      formData.ProductImage.forEach((file) => {
-        data.append("ProductImage", file);
-      });
+      if (formData.ProductImage.length === 1) {
+        data.append("ProductImage", formData.ProductImage[0]);
+      } else {
+        formData.ProductImage.forEach((file) => {
+          data.append("ProductImages", file);
+        });
+      }
     }
 
     try {

@@ -7,8 +7,9 @@ function useUpdateStockProduct() {
     const updateStockProduct = async (
         id: string | number,
         data: {
-            productUnitId: number;
+            productId: number;
             quantity: number;
+            expiryDate: string;
         }
     ) => {
         setLoading(true);

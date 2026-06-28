@@ -20,11 +20,6 @@ export const baseColumns = ({ refresh, t }: { refresh: () => void; t: (key: stri
         cell: ({ row }) => <span>{row.getValue("productName") || "-"}</span>,
     },
     {
-        accessorKey: "unitName",
-        header: t("unitName"),
-        cell: ({ row }) => <span>{row.getValue("unitName") || "-"}</span>,
-    },
-    {
         accessorKey: "quantity",
         header: t("quantity"),
         cell: ({ row }) => <span>{row.getValue("quantity")}</span>,

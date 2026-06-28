@@ -1274,6 +1274,7 @@
     "validationError": "Validation Error",
     "fill_required_fields": "Please fill in all required fields",
     "productUnit": "Product Unit",
+    "expiryDate": "Expiry Date",
     "save": "Save"
   }
 }

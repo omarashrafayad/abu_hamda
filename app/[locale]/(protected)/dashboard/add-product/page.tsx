@@ -90,9 +90,13 @@ const AddProduct = () => {
     formData.append("BrandId", brandId);
     formData.append("Price", Price.toString());
     
-    ProductImage.forEach((file) => {
-      formData.append("ProductImage", file);
-    });
+    if (ProductImage.length === 1) {
+      formData.append("ProductImage", ProductImage[0]);
+    } else if (ProductImage.length > 1) {
+      ProductImage.forEach((file) => {
+        formData.append("ProductImages", file);
+      });
+    }
     try {
       const success = await createProduct(formData);
       if (success) {

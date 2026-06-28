@@ -4,17 +4,24 @@ import { useState } from "react";
 function useAddStockProduct() {
     const [loading, setLoading] = useState(false);
 
-    const addStockProduct = async (data: {
-        productUnitId: number;
-        quantity: number;
-    }) => {
+    const addStockProduct = async (
+        data: {
+            productId: number;
+            quantity: number;
+            expiryDate: string;
+        }
+    ) => {
         setLoading(true);
         try {
             const response = await AxiosInstance.post("/api/StockProducts", data);
-            
+
             return response.status === 200 || response.status === 201;
         } catch (err: any) {
-            const errorMessage = err.response?.data?.message || err.message || "Failed to add stock product";
+            const errorMessage =
+                err.response?.data?.message ||
+                err.message ||
+                "Failed to add stock product";
+
             throw errorMessage;
         } finally {
             setLoading(false);

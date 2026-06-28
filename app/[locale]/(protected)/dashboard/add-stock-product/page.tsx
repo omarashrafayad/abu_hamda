@@ -16,32 +16,33 @@ import {
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/routing";
 import useAddStockProduct from "@/services/stockProducts/addStockProduct";
-import useGetProductUnits from "@/services/productUnits/getAllProductUnits";
+import useGettingAllProducts from "@/services/products/gettingAllProducts";
 import { Loader2, Upload } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 const AddStockProductPage = () => {
   const { addStockProduct, loading: addingLoading } = useAddStockProduct();
-  const { productUnits, loading: unitsLoading, getAllProductUnits } = useGetProductUnits();
-  
+  const { products, loading: productsLoading, getAllProducts } = useGettingAllProducts();
+
   const router = useRouter();
   const t = useTranslations("stockProducts");
 
-  const [productUnitId, setProductUnitId] = useState("");
-  const [productUnitSearch, setProductUnitSearch] = useState("");
+  const [productId, setProductId] = useState("");
+  const [productSearch, setProductSearch] = useState("");
   const [quantity, setQuantity] = useState("");
+  const [expiryDate, setExpiryDate] = useState("");
 
   useEffect(() => {
-    getAllProductUnits();
+    getAllProducts("false", 1, 1000, "");
   }, []);
 
-  const filteredProductUnits = productUnits?.filter((pu: any) =>
-    (pu.productName || "").toLowerCase().includes(productUnitSearch.toLowerCase()) ||
-    (pu.unitName || "").toLowerCase().includes(productUnitSearch.toLowerCase())
+  const filteredProducts = products?.filter((prod: any) =>
+    (prod.name || "").toLowerCase().includes(productSearch.toLowerCase()) ||
+    (prod.productName || "").toLowerCase().includes(productSearch.toLowerCase())
   ) || [];
 
   const handleAddStockProductSubmit = async () => {
-    if (!productUnitId || !quantity) {
+    if (!productId || !quantity || !expiryDate) {
       toast.error(t("validationError"), {
         description: t("fill_required_fields")
       });
@@ -49,8 +50,10 @@ const AddStockProductPage = () => {
     }
 
     const payload = {
-      productUnitId: Number(productUnitId),
+      productId: Number(productId),
       quantity: Number(quantity),
+      expiryDate: new Date(expiryDate).toISOString(),
+
     };
 
     try {
@@ -68,7 +71,7 @@ const AddStockProductPage = () => {
     }
   };
 
-  if (unitsLoading) {
+  if (productsLoading) {
     return (
       <div className="h-screen flex items-center justify-center">
         <Loader2 className="animate-spin text-primary" size={40} />
@@ -85,26 +88,26 @@ const AddStockProductPage = () => {
           </CardHeader>
 
           <CardContent className="space-y-6">
-            {/* Product Unit Selector */}
+            {/* Product Selector */}
             <div className="flex items-center flex-wrap gap-2">
-              <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="productUnitId">
-                {t("productUnit")}
+              <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="productId">
+                {t("productName")}
               </Label>
-              <Select onValueChange={(value) => setProductUnitId(value)}>
+              <Select onValueChange={(value) => setProductId(value)}>
                 <SelectTrigger className="flex-1 min-w-[300px]">
-                  <SelectValue placeholder={t("productUnit")} />
+                  <SelectValue placeholder={t("productName")} />
                 </SelectTrigger>
                 <SelectContent>
                   <div className="px-2 py-1">
                     <Input
                       placeholder={t("searchPlaceholder")}
-                      onChange={(e) => setProductUnitSearch(e.target.value)}
+                      onChange={(e) => setProductSearch(e.target.value)}
                     />
                   </div>
                   <SelectGroup className="max-h-[300px] overflow-y-auto">
-                    {filteredProductUnits.map((pu: any) => (
-                      <SelectItem key={pu.id} value={pu.id.toString()}>
-                        {pu.productName} ({pu.unitName})
+                    {filteredProducts.map((prod: any) => (
+                      <SelectItem key={prod.id} value={prod.id.toString()}>
+                        {prod.name}
                       </SelectItem>
                     ))}
                   </SelectGroup>
@@ -125,6 +128,20 @@ const AddStockProductPage = () => {
                 placeholder={t("quantity")}
                 value={quantity}
                 onChange={(e) => setQuantity(e.target.value)}
+              />
+            </div>
+
+            {/* Expiry Date */}
+            <div className="flex items-center flex-wrap gap-2">
+              <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="expiryDate">
+                {t("expiryDate")}
+              </Label>
+              <Input
+                id="expiryDate"
+                type="date"
+                className="flex-1 min-w-[300px]"
+                value={expiryDate}
+                onChange={(e) => setExpiryDate(e.target.value)}
               />
             </div>
           </CardContent>
