@@ -102,7 +102,7 @@ export function AddDeliveryTimeDialog({ open, onOpenChange, onSuccess, editData 
             <div className="space-y-2">
               <Label className="font-medium text-default-700">From</Label>
               <Input 
-                type="time"
+                type="text"
                 value={formData.from}
                 onChange={(e) => handleChange("from", e.target.value)}
                 className="h-12 bg-default-50 border-default-200 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all"
@@ -111,7 +111,7 @@ export function AddDeliveryTimeDialog({ open, onOpenChange, onSuccess, editData 
             <div className="space-y-2">
               <Label className="font-medium text-default-700">To</Label>
               <Input 
-                type="time"
+                type="text"
                 value={formData.to}
                 onChange={(e) => handleChange("to", e.target.value)}
                 className="h-12 bg-default-50 border-default-200 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all"

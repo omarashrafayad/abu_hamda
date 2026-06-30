@@ -22,46 +22,26 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const AddressCell = ({ addresses, t }: { addresses: any; t?: (key: string) => string }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const addressList = Array.isArray(addresses)
-    ? addresses.map((addr: any) => addr?.addressLine).filter(Boolean)
-    : addresses?.addressLine ? [addresses.addressLine] : [];
-
-  if (addressList.length === 0 || addressList[0] === "No address") {
-    return <span className="text-default-400 text-sm">{t?.("noAddress") || "No address"}</span>;
+const AddressCell = ({
+  addresses,
+  t,
+}: {
+  addresses: any;
+  t?: (key: string) => string;
+}) => {
+  if (!addresses) {
+    return (
+      <span className="text-default-400 text-sm">
+        {t?.("noAddress") || "No address"}
+      </span>
+    );
   }
 
-  const hasMultiple = addressList.length > 1;
-  const visibleAddresses = isExpanded ? addressList : [addressList[0]];
-
   return (
-    <div className="flex flex-col py-1 min-w-[200px] max-w-[350px] gap-1">
-      {visibleAddresses.map((addr, index) => (
-        <div
-          key={index}
-          dir="auto"
-          className="text-[13px] text-default-600 leading-relaxed border-b border-dashed border-default-200 last:border-0 pb-1.5 mb-0.5 last:mb-0 last:pb-0 text-start"
-        >
-          {addr}
-        </div>
-      ))}
-
-      {hasMultiple && (
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setIsExpanded(!isExpanded);
-          }}
-          className="text-[11px] font-bold text-blue-500 hover:text-blue-700 w-fit mt-1 underline-offset-4 hover:underline transition-all text-start"
-        >
-          {isExpanded
-            ? (t?.("showLess") || "Show Less")
-            : `+ ${addressList.length - 1} ${t?.("moreAddresses") || "More Addresses"}`}
-        </button>
-      )}
+    <div className="flex flex-col gap-1">
+      <span>{addresses.street}</span>
+      <span>{addresses.city}</span>
+      <span>{addresses.country}</span>
     </div>
   );
 };
@@ -77,7 +57,7 @@ export type DataProps = {
   isActive: boolean;
   isPopular: boolean | null;
   action: React.ReactNode;
-  addresses?: any;
+  address?: any;
   orderNum?: number;
 };
 
@@ -510,36 +490,36 @@ export const baseColumns = ({ refresh, t, isRepresentative, isProvider, showWork
       header: t?.("phoneNumber") || "Phone Number",
       cell: ({ row }) => <div className="text-sm text-default-600">{row.original.phoneNumber}</div>,
     },
-    {
-      accessorKey: "isActive",
-      header: t?.("status") || "Active",
-      cell: ({ row }) => <StatusCell row={row} refresh={refresh} t={t} />,
-    },
-    {
-      accessorKey: "isPopular",
-      header: t?.("popular") || "Popular",
-      cell: ({ row }) => <PopularCell row={row} t={t} />,
-    },
+    // {
+    //   accessorKey: "isActive",
+    //   header: t?.("status") || "Active",
+    //   cell: ({ row }) => <StatusCell row={row} refresh={refresh} t={t} />,
+    // },
+    // {
+    //   accessorKey: "isPopular",
+    //   header: t?.("popular") || "Popular",
+    //   cell: ({ row }) => <PopularCell row={row} t={t} />,
+    // },
   ];
 
-  if (isProvider) {
-    columns.push({
-      accessorKey: "orderNum",
-      header: t?.("orderNum") || "Order Num",
-      cell: ({ row }) => (
-        <div className="text-sm text-default-600">
-          {row.original.orderNum !== undefined && row.original.orderNum !== null ? row.original.orderNum : "-"}
-        </div>
-      ),
-    });
-  }
+  // if (isProvider) {
+  //   columns.push({
+  //     accessorKey: "orderNum",
+  //     header: t?.("orderNum") || "Order Num",
+  //     cell: ({ row }) => (
+  //       <div className="text-sm text-default-600">
+  //         {row.original.orderNum !== undefined && row.original.orderNum !== null ? row.original.orderNum : "-"}
+  //       </div>
+  //     ),
+  //   });
+  // }
 
   columns.push(
     {
       accessorKey: "addresses",
       header: t?.("addresses") || "Address",
       cell: ({ row }) => {
-        return <AddressCell addresses={row.original.addresses} t={t} />;
+        return <AddressCell addresses={row.original.address} t={t} />;
       },
     },
     {

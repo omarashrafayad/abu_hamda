@@ -7,7 +7,7 @@ function GetUsers() {
 
     const gettingAllUsers = async () => {
         setLoading(true)
-        await AxiosInstance.get('/api/Users/users')
+        await AxiosInstance.get('/api/Auth/users')
         .then((response) => {
             if (response.data.length > 0) {
                 setData(response.data)

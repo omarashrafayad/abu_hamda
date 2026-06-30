@@ -32,18 +32,16 @@ const EditStockProduct = () => {
   const { getStockProductById } = useGetStockProductById();
   const { products, loading: productsLoading, getAllProducts } = useGettingAllProducts();
 
- const [productId, setProductId] = useState("");
+  const [productId, setProductId] = useState("");
   const [productSearch, setProductSearch] = useState("");
   const [quantity, setQuantity] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
-
   const [fetching, setFetching] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         await getAllProducts("false", 1, 1000, "");
-        
         if (id) {
           const data = await getStockProductById(id);
           if (data) {

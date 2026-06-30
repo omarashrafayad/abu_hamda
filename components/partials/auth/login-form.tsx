@@ -70,7 +70,7 @@ const LoginForm = () => {
     <form onSubmit={handleSubmit(onSubmit)} className="mt-5 2xl:mt-7 space-y-4">
       <div className="space-y-2">
         <Label htmlFor="email" className=" font-medium text-default-600">
-          Email{" "}
+          الايميل{" "}
         </Label>
         <Input size="lg"
           disabled={isPending}
@@ -90,7 +90,7 @@ const LoginForm = () => {
 
       <div className="mt-3.5 space-y-2">
         <Label htmlFor="password" className="mb-2 font-medium text-default-600">
-          Password{" "}
+          كلمة المرور{" "}
         </Label>
         <div className="relative">
           <Input size="lg"
@@ -124,20 +124,16 @@ const LoginForm = () => {
       )}
 
       <div className="flex justify-between">
-        <div className="flex gap-2 items-center">
-          <Checkbox id="checkbox" defaultChecked />
-          <Label htmlFor="checkbox">Keep Me Signed In</Label>
-        </div>
         <Link
           href="/auth/forgot-password"
           className="text-sm text-default-800 dark:text-default-400 leading-6 font-medium"
         >
-          Forgot Password?
+          هل نسيت كلمة السر ؟
         </Link>
       </div>
       <Button fullWidth disabled={isPending}>
         {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        {isPending ? "Loading..." : "Sign In"}
+        {isPending ? "جاري تسجيل الدخول..." : "تسجيل الدخول"}
       </Button>
     </form>
   );

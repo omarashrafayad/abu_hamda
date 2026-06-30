@@ -8,7 +8,7 @@ const Login = ({ params: { locale } }: { params: { locale: string } }) => {
       <div className="flex w-full items-center overflow-hidden min-h-dvh h-dvh basis-full">
         <div className="overflow-y-auto flex flex-wrap w-full h-dvh">
           <div
-              className="lg:block hidden flex-1 overflow-hidden text-[40px] leading-[48px] text-default-600 relative z-1 bg-[#1474AE]"
+              className="lg:block hidden flex-1 overflow-hidden text-[40px] leading-[48px] text-default-600 relative z-1 bg-[#ff793b]"
           >
             <div className="absolute left-0 2xl:bottom-[-160px] bottom-[-130px] h-full w-full z-[-1]">
               <Image
@@ -19,8 +19,8 @@ const Login = ({ params: { locale } }: { params: { locale: string } }) => {
                   height={300}
                   className="mb-10 w-[65%] my-auto mx-auto"
               />
-              <h4 className="text-white text-xl lg:text-4xl text-center font-bold">Welcome Back!</h4>
-              <p className="text-xl font-semibold text-white text-center">Please Enter your Information to Login</p>
+              <h4 className="text-white text-xl lg:text-4xl text-center font-bold">اهلا بكم في نظام  </h4>
+              <p className="text-xl font-semibold text-white text-center">يرجى إدخال معلوماتك لتسجيل الدخول</p>
             </div>
           </div>
           <div className="flex-1 relative">
