@@ -23,6 +23,11 @@ export const productColumns: ColumnDef<Price>[] = [
         header: "Sales Price",
         cell: ({ row }) => <span>{row.getValue("salesPrice")}</span>,
     },
+        {
+        accessorKey: "sku",
+        header: "SKU",
+        cell: ({ row }) => <span>{row.getValue("sku")}</span>,
+    },
     {
         accessorKey: "creationDate",
         header: "Creation Date",

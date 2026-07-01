@@ -4,7 +4,7 @@ import { useState } from "react";
 function useUpdateArea() {
     const [loading, setLoading] = useState(false);
 
-    const updateArea = async (id: string | number, data: { name: string; cityId: string | number }) => {
+    const updateArea = async (id: string | number, data: { name: string; cityId: string | number ; shippingFees?: number }) => {
         setLoading(true);
         try {
             const response = await AxiosInstance.put(`/api/Areas/${id}`, data);

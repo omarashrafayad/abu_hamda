@@ -13,7 +13,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { baseColumns } from "./columns";
-import { Input } from "@/components/ui/input";
 
 import {
   Table,
@@ -26,130 +25,40 @@ import {
 
 import TablePagination from "./table-pagination";
 import { Card, CardContent } from "@/components/ui/card";
-import { useRouter } from "@/i18n/routing";
 import useGettingAllOrders from "@/services/Orders/gettingAllOrders";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { Orders } from "@/types/orders";
-import SearchInput from "@/app/[locale]/(protected)/components/SearchInput/SearchInput";
-import useGetUsersByRoleId from "@/services/users/GetUsersByRoleId";
-import Cookies from "js-cookie";
-import { normalizeRole } from "@/lib/roleRoutes";
-import useGettingMyOrders from "@/services/Orders/gettingMyOrders";
 import { Button } from "@/components/ui/button";
 import { OrderStatus, OrderStatusLabel } from "@/enum";
-import useVendorOrder from "@/services/Orders/vendor-order";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
-import { toast } from "sonner";
-import { Save } from "lucide-react";
-import useGettingUserOrders from "@/services/Orders/gettingUserOrders";
-import useGettingDeliveryOrders from "@/services/Orders/gettingDeliveryOrders";
-
-const mapGroupedOrders = (rawGroups: any[]): Orders[] => {
-  if (!rawGroups || !Array.isArray(rawGroups)) return [];
-  return rawGroups.map((group: any) => {
-    if (!group.orders) return group;
-    
-    const subOrders = group.orders || [];
-    const firstOrder = subOrders[0] || {};
-    // Merge items
-    const mergedItems = subOrders.flatMap((o: any) => o.items || []);
-    
-    // Sum totalAmount
-    const totalAmount = subOrders.reduce((sum: number, o: any) => sum + (o.totalAmount || 0), 0);
-    
-    // Merge orderNotes
-    const mergedNotes = subOrders.map((o: any) => o.orderNote).filter(Boolean).join(" | ");
-    
-    // Merge deliveryNames
-    const deliveryNames = Array.from(
-      new Set(subOrders.map((o: any) => o.deliveryName).filter((n: any) => n && n !== "there is no deleivry yet"))
-    );
-    const mergedDeliveryName = deliveryNames.length > 0 ? deliveryNames.join(", ") : "there is no delivery yet";
-    return {
-      ...firstOrder,
-      id: firstOrder.id || group.orderNumber,
-      orderNumber: group.orderNumber,
-      isGrouped: true,
-      orders: subOrders,
-      items: mergedItems,
-      totalAmount,
-      orderNote: mergedNotes,
-      deliveryName: mergedDeliveryName,
-      totalAmountOrder: group.totalAmountOrder,
-      totalAmountOrderAfter: group.totalAmountOrderAfter,
-      coupon: group.coupon,
-      shippingFees: group.shippingFees,
-    };
-  });
-};
+import { Input } from "@/components/ui/input";
 
 export default function TransactionsTable() {
-  const rawUserRole = Cookies.get("userRole");
-  const userRole = normalizeRole(rawUserRole) || rawUserRole;
-  const isAdmin = userRole == "Admin";
-  const userId = Cookies.get("userId");
-
-  const { loading: myOrdersLoading, orders: myOrders, gettingVendorOrders, error: myOrdersError } = useVendorOrder()
   const { gettingAllOrders, orders, loading, error } = useGettingAllOrders();
-  const { gettingUserOrders, orders: userOrders, loading: userOrdersLoading } = useGettingUserOrders();
-  const { loading: usersLoading, users: inventoryManagers, getUsersByRoleId } = useGetUsersByRoleId();
-  const { loading: deliveryOrdersLoading, orders: deliveryOrders, gettingDeliveryOrders } = useGettingDeliveryOrders();
-
-  const isRepresentative = userRole === "representative";
-  const isDelivery = userRole?.toLowerCase() === "delivery";
-
-
-  const searchParams = useSearchParams();
-  const filterUserId = searchParams ? searchParams.get("userId") : null;
-
-  const router = useRouter();
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const [filteredOrders, setFilteredOrders] = useState<Orders[]>([]);
+  const [filteredOrders, setFilteredOrders] = useState<any[]>([]);
   const [selectedStatus, setSelectedStatus] = useState<OrderStatus | "all">("all");
+  const [searchTerm, setSearchTerm] = useState("");
 
+  const t = useTranslations("OrderList");
 
-  const allOrdersData = React.useMemo(() => {
-    if (filterUserId && isAdmin) {
-      return userOrders?.filter(order => order.totalAmount !== 0) || [];
-    }
-    let rawData;
-    if (isAdmin) {
-      rawData = mapGroupedOrders(orders);
-    } else if (isRepresentative || isDelivery) {
-      rawData = mapGroupedOrders(deliveryOrders);
-    } else {
-      rawData = myOrders;
-    }
-    return rawData?.filter(order => order.totalAmount !== 0) || [];
-  }, [isAdmin, isRepresentative, isDelivery, orders, myOrders, deliveryOrders, userOrders, filterUserId]);
-
-  const isLoadingData = (isAdmin && !filterUserId) ? loading : (filterUserId ? userOrdersLoading : (isRepresentative || isDelivery ? deliveryOrdersLoading : myOrdersLoading));
-
-  const t = useTranslations("OrderList")
+  // Normalize orders: coerce status from string to number
+  const normalizedOrders = React.useMemo(() => {
+    if (!orders || !Array.isArray(orders)) return [];
+    return orders.map((order: any) => ({
+      ...order,
+      status: order.status !== undefined ? Number(order.status) : 0,
+    }));
+  }, [orders]);
 
   const columns = baseColumns({
-    refresh: () => {
-      if (isAdmin) {
-        if (filterUserId) {
-          gettingUserOrders(filterUserId, selectedStatus === "all" ? null : selectedStatus);
-        } else {
-          gettingAllOrders();
-        }
-      } else if (isRepresentative || isDelivery) {
-        gettingDeliveryOrders();
-      } else {
-        gettingVendorOrders(userId);
-      }
-    },
+    refresh: () => gettingAllOrders(),
     t,
-    isRepresentative
   });
 
   const table = useReactTable({
@@ -173,54 +82,55 @@ export default function TransactionsTable() {
 
   const filterOrdersByStatus = (status: OrderStatus | "all") => {
     setSelectedStatus(status);
-    if (!allOrdersData) return;
+    if (!normalizedOrders) return;
 
     if (status === "all") {
-      setFilteredOrders(allOrdersData);
+      setFilteredOrders(normalizedOrders);
     } else {
-      const filtered = allOrdersData.filter(order => {
-        if (order.isGrouped) {
-          return order.orders?.some((o: any) => o.status === status);
-        }
-        return order.status === status;
-      });
+      const filtered = normalizedOrders.filter(
+        (order: any) => Number(order.status) === status
+      );
       setFilteredOrders(filtered);
     }
   };
 
   useEffect(() => {
-    if (isAdmin) {
-      if (filterUserId) {
-        gettingUserOrders(filterUserId, selectedStatus === "all" ? null : selectedStatus);
-      } else {
-        gettingAllOrders();
-      }
-    } else if (isRepresentative || isDelivery) {
-      gettingDeliveryOrders();
-    } else {
-      if (userId) {
-        gettingVendorOrders(userId);
-      }
-    }
-  }, [isAdmin, isRepresentative, isDelivery, userId, filterUserId, gettingAllOrders, gettingVendorOrders, gettingUserOrders, gettingDeliveryOrders, selectedStatus]);
-
-
+    gettingAllOrders();
+  }, [gettingAllOrders]);
 
   useEffect(() => {
-    if (allOrdersData) {
+    if (normalizedOrders) {
       filterOrdersByStatus(selectedStatus);
     }
-  }, [allOrdersData, selectedStatus]);
+  }, [normalizedOrders, selectedStatus]);
+
+  // Search filter by order id
+  useEffect(() => {
+    if (!searchTerm.trim()) {
+      filterOrdersByStatus(selectedStatus);
+      return;
+    }
+    const term = searchTerm.toLowerCase();
+    const filtered = normalizedOrders.filter((order: any) => {
+      const matchesStatus =
+        selectedStatus === "all" || Number(order.status) === selectedStatus;
+      const matchesSearch =
+        String(order.id).toLowerCase().includes(term) ||
+        (order.couponCode && order.couponCode.toLowerCase().includes(term));
+      return matchesStatus && matchesSearch;
+    });
+    setFilteredOrders(filtered);
+  }, [searchTerm]);
 
   return (
     <Card className="w-full">
       <div className="px-5 py-4 flex flex-col md:flex-row items-center gap-4">
         <div className="w-full md:w-auto flex-1">
-          <SearchInput
-            data={allOrdersData ?? []}
-            setFilteredData={setFilteredOrders}
-            filterKey="doctorName"
-            placeholder={t("searchPlaceholder") || "Search by doctor name..."}
+          <Input
+            placeholder={t("searchPlaceholder") || "Search by order ID..."}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="max-w-sm"
           />
         </div>
 
@@ -287,22 +197,24 @@ export default function TransactionsTable() {
 
           <Button
             size="md"
-            variant={selectedStatus === OrderStatus?.Delivered ? "default" : "outline"}
+            variant={selectedStatus === OrderStatus.Delivered ? "default" : "outline"}
             color="default"
             className="ring-0 outline-0 hover:ring-0 hover:ring-offset-0 font-normal border-default-200 rounded-md cursor-pointer"
             onClick={() => filterOrdersByStatus(OrderStatus.Delivered)}
           >
             {t(`statusCode.${OrderStatusLabel[OrderStatus.Delivered].toLowerCase()}`)}
           </Button>
+
           <Button
             size="md"
-            variant={selectedStatus === OrderStatus?.Cancel ? "default" : "outline"}
+            variant={selectedStatus === OrderStatus.Cancel ? "default" : "outline"}
             color="default"
             className="ring-0 outline-0 hover:ring-0 hover:ring-offset-0 font-normal border-default-200 rounded-md cursor-pointer"
             onClick={() => filterOrdersByStatus(OrderStatus.Cancel)}
           >
             {t(`statusCode.${OrderStatusLabel[OrderStatus.Cancel].toLowerCase()}`)}
           </Button>
+
           <Button
             size="md"
             variant={selectedStatus === OrderStatus.Completed ? "default" : "outline"}
@@ -312,19 +224,10 @@ export default function TransactionsTable() {
           >
             {t(`statusCode.${OrderStatusLabel[OrderStatus.Completed].toLowerCase()}`)}
           </Button>
-          {/* <Button
-            size="md"
-            variant={selectedStatus === OrderStatus.ReAssignTo ? "default" : "ghost"}
-            color="default"
-            className="ring-0 outline-0 hover:ring-0 hover:ring-offset-0 font-normal border-default-200 rounded-none cursor-pointer"
-            onClick={() => filterOrdersByStatus(OrderStatus.ReAssignTo)}
-          >
-            {t(`statusCode.${OrderStatusLabel[OrderStatus.ReAssignTo].toLocaleLowerCase()}`)}
-          </Button> */}
         </div>
       </div>
 
-      {(isLoadingData || usersLoading) ? (
+      {loading ? (
         <div className="flex items-center justify-center h-full py-8">
           <Loader2 className="w-6 h-6 animate-spin" />
         </div>
@@ -354,9 +257,6 @@ export default function TransactionsTable() {
                     <TableRow
                       key={row.id}
                       data-state={row.getIsSelected() && "selected"}
-                      className={cn(
-                        row.original.status === 7 && "line-through opacity-60 text-muted-foreground"
-                      )}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <TableCell key={cell.id} className="h-[75px]">
@@ -371,7 +271,7 @@ export default function TransactionsTable() {
                       colSpan={columns.length}
                       className="h-24 text-center font-medium"
                     >
-                      {filterUserId ? "No orders found for this user." : t("noOrdersFound") || "No orders found."}
+                      {t("noOrdersFound") || "No orders found."}
                     </TableCell>
                   </TableRow>
                 )}
@@ -383,4 +283,4 @@ export default function TransactionsTable() {
       <TablePagination table={table} />
     </Card>
   );
-};
+}

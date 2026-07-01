@@ -1,136 +1,125 @@
-const rows = [
-  {
-    item: "Headphone",
-    tax: "$0.00",
-    delivery:"home delivery",
-    qty: 2,
-    price: "$600.25",
-    total: "$1200.50",
-  },
-  {
-    item: "Headphone",
-    tax: "$0.00",
-    delivery:"home delivery",
-    qty: 2,
-    price: "$600.25",
-    total: "$1200.50",
-  },
-  {
-    item: "Headphone",
-    tax: "$0.00",
-    delivery:"home delivery",
-    qty: 2,
-    price: "$600.25",
-    total: "$1200.50",
-  },
-  {
-    item: "Headphone",
-    tax: "$0.00",
-    delivery:"home delivery",
-    qty: 2,
-    price: "$600.25",
-    total: "$1200.50",
-  },
-];
+"use client";
 
-const TotalTable = () => {
+import React from "react";
+import { OrderDetailsItem } from "@/services/Orders/getOrderDetails";
+
+interface TotalTableProps {
+  items: OrderDetailsItem[];
+  totalAmount: number;
+  discountAmount: number;
+  couponCode: string | null;
+  t: (key: string) => string;
+}
+
+const TotalTable: React.FC<TotalTableProps> = ({
+  items,
+  totalAmount,
+  discountAmount,
+  couponCode,
+  t,
+}) => {
+  // Subtotal is sum of item subTotals (or totalAmount if items is empty)
+  const subtotal = items?.reduce((sum, item) => sum + (item.subTotal || 0), 0) || 0;
+  // Invoice total is totalAmount (which might already include discount, or we subtract)
+  // Let's display exactly what is returned
+  const invoiceTotal = totalAmount;
+
   return (
     <>
-      <table className="w-full">
-        <thead>
-          <tr>
-            <th
-              colSpan={3}
-              className="bg-default-50  text-xs  font-medium leading-4 uppercase text-default-600 text-left last:text-right "
-            >
-              <span className="block px-6 py-5 font-semibold">ITEM</span>
-            </th>
-            <th className="bg-default-50  text-xs  font-medium leading-4 uppercase text-default-600 text-left last:text-right ">
-              <span className="block px-6 py-5 font-semibold">
-                Delivery Type
-              </span>
-            </th>
-            <th className="bg-default-50  text-xs  font-medium leading-4 uppercase text-default-600 text-left last:text-right ">
-              <span className="block px-6 py-5 font-semibold">Quantity</span>
-            </th>
-            <th className="bg-default-50  text-xs  font-medium leading-4 uppercase text-default-600 text-left last:text-right ">
-              <span className="block px-6 py-5 font-semibold">Unit PRICE</span>
-            </th>
-            <th className="bg-default-50  text-xs  font-medium leading-4 uppercase text-default-600 text-left last:text-right ">
-              <span className="block px-6 py-5 font-semibold">Tax</span>
-            </th>
-            <th className="bg-default-50  text-xs  font-medium leading-4 uppercase text-default-600 text-left last:text-right ">
-              <span className="block px-6 py-5 font-semibold">TOTAL</span>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((data, index) => (
-            <tr
-              key={index}
-              className="border-b border-default-100 border-solid  border-0"
-            >
-              <td
-                colSpan={3}
-                className="text-default-900  text-sm  font-normal text-left last:text-right  px-6 py-4"
-              >
-                {data.item}
-              </td>
-              <td className="text-default-900  text-sm  font-normal text-left last:text-right  px-6 py-4">
-                {data.delivery}
-              </td>
-              <td className="text-default-900  text-sm  font-normal text-left last:text-right  px-6 py-4">
-                {data.qty}
-              </td>
-              <td className="text-default-900  text-sm  font-normal text-left last:text-right  px-6 py-4">
-                {data.price}
-              </td>
-              <td className="text-default-900  text-sm  font-normal text-left last:text-right  px-6 py-4">
-                {data.tax}
-              </td>
-              <td className="text-default-900  text-sm  font-normal text-left last:text-right  px-6 py-4">
-                {data.total}
-              </td>
+      <div className="overflow-x-auto w-full">
+        <table className="w-full min-w-[600px] border-collapse">
+          <thead>
+            <tr className="border-b border-default-200">
+              <th className="bg-default-50 text-xs font-semibold uppercase text-default-600 text-left px-6 py-4 rtl:text-right">
+                {t("itemName") || "Item Name"}
+              </th>
+              <th className="bg-default-50 text-xs font-semibold uppercase text-default-600 text-left px-6 py-4 rtl:text-right">
+                {t("unit") || "Unit"}
+              </th>
+              <th className="bg-default-50 text-xs font-semibold uppercase text-default-600 text-center px-6 py-4">
+                {t("quantity") || "Quantity"}
+              </th>
+              <th className="bg-default-50 text-xs font-semibold uppercase text-default-600 text-right px-6 py-4 rtl:text-left">
+                {t("price") || "Unit Price"}
+              </th>
+              <th className="bg-default-50 text-xs font-semibold uppercase text-default-600 text-right px-6 py-4 rtl:text-left">
+                {t("total") || "Total"}
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className="md:flex px-6 py-6 items-center">
-        <div className="flex-1 text-default-500  text-sm">
-          Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet
-          sint. Velit <br />
-          officia consequat duis enim velit mollit.
+          </thead>
+          <tbody>
+            {items && items.length > 0 ? (
+              items.map((item, index) => (
+                <tr
+                  key={item.id || index}
+                  className="border-b border-default-100 hover:bg-default-50/50 transition-colors"
+                >
+                  <td className="text-default-900 text-sm font-medium px-6 py-4 text-left rtl:text-right">
+                    {item.productName}
+                  </td>
+                  <td className="text-default-700 text-sm px-6 py-4 text-left rtl:text-right">
+                    {item.unitName || "-"}
+                  </td>
+                  <td className="text-default-900 text-sm text-center px-6 py-4">
+                    {item.quantity}
+                  </td>
+                  <td className="text-default-900 text-sm text-right px-6 py-4 rtl:text-left font-mono">
+                    {item.price?.toFixed(2)}
+                  </td>
+                  <td className="text-default-900 text-sm text-right px-6 py-4 rtl:text-left font-semibold font-mono">
+                    {item.subTotal?.toFixed(2)}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={5} className="text-center py-8 text-default-500">
+                  {t("noItemsFound") || "No items found in this order"}
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="md:flex px-6 py-6 items-start gap-8 justify-between border-t border-default-100">
+        <div className="flex-1 text-default-500 text-sm mb-4 md:mb-0 max-w-md">
+          {/* Note or instructions can be added here if available */}
         </div>
-        <div className="flex-none min-w-[270px] space-y-3 ">
-          <div className="flex justify-between">
-            <span className="font-medium text-default-600 text-xs  uppercase">
-              Subtotal:
+        
+        <div className="flex-none min-w-[300px] space-y-3 bg-default-50/50 p-4 rounded-xl border border-default-100">
+          <div className="flex justify-between items-center text-sm">
+            <span className="font-medium text-default-600 uppercase">
+              {t("subtotal") || "Subtotal"}:
             </span>
-            <span className="text-default-900 ">$3601.50</span>
+            <span className="text-default-900 font-semibold font-mono">
+              {subtotal.toFixed(2)}
+            </span>
           </div>
-          <div className="flex justify-between">
-            <span className="font-medium text-default-600 text-xs  uppercase">
-              Tax (3.5%):
+
+          {discountAmount > 0 && (
+            <div className="flex justify-between items-center text-sm text-rose-600">
+              <span className="font-medium uppercase flex items-center gap-1.5">
+                {t("couponDiscount") || "Coupon Discount"}:
+                {couponCode && (
+                  <span className="text-[11px] bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200 uppercase font-mono">
+                    {couponCode}
+                  </span>
+                )}
+              </span>
+              <span className="font-semibold font-mono">
+                -{discountAmount.toFixed(2)}
+              </span>
+            </div>
+          )}
+
+          <div className="flex justify-between items-center border-t border-default-200 pt-3 text-base">
+            <span className="font-bold text-default-800 uppercase">
+              {t("totalAmount") || "Total Amount"}:
             </span>
-            <span className="text-default-900 ">$20.50</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="font-medium text-default-600 text-xs  uppercase">
-              Shipping:
+            <span className="text-default-950 font-extrabold font-mono text-lg">
+              {invoiceTotal.toFixed(2)}
             </span>
-            <span className="text-default-900 ">$20.50</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="font-medium text-default-600 text-xs  uppercase">
-              Coupon Discount:
-            </span>
-            <span className="text-default-900 ">$20.50</span>
-          </div>
-          <div className="flex justify-between border-solid border-t border-default-200 pt-3">
-            <span className="font-medium text-default-600 text-xs  uppercase">
-              Invoice total:
-            </span>
-            <span className="text-default-900  font-bold">$3622.00</span>
           </div>
         </div>
       </div>

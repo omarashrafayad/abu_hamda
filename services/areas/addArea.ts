@@ -4,7 +4,7 @@ import { useState } from "react";
 function useAddArea() {
     const [loading, setLoading] = useState(false);
 
-    const addArea = async (data: { name: string; cityId: string | number }) => {
+    const addArea = async (data: { name: string; cityId: string | number ; shippingFees?: number }) => {
         setLoading(true);
         try {
             const response = await AxiosInstance.post("/api/Areas", data);

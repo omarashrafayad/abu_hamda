@@ -10,7 +10,7 @@ function useGettingAllOrders() {
         setLoading(true);
         setError(null);
         const timestamp = new Date().getTime();
-        await AxiosInstance.get(`/api/Orders/orders?t=${timestamp}`).then((res) => {
+        await AxiosInstance.get(`/api/Orders?t=${timestamp}`).then((res) => {
             if (res.status === 200 || res.status === 201 || !res.data.errors) {
                 setOrders(res.data);
             } else {

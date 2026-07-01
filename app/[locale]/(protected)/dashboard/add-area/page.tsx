@@ -27,7 +27,7 @@ const AddAreaPage = () => {
   const t = useTranslations("areas");
 
   const [name, setName] = useState("");
-  // const [shippingCosts, setShippingCosts] = useState<string>("0");
+  const [shippingFees, setShippingFees] = useState<number>(0);
   const [cityId, setCityId] = useState("");
   const [citySearch, setCitySearch] = useState("");
 
@@ -49,7 +49,7 @@ const AddAreaPage = () => {
 
     const payload = {
       name: name,
-      // shippingCosts: Number(shippingCosts),
+      shippingFees: shippingFees,
       cityId: Number(cityId),
     };
 
@@ -100,19 +100,19 @@ const AddAreaPage = () => {
               />
             </div>
 
-            {/* <div className="flex items-center flex-wrap gap-2">
-              <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="shippingCosts">
-                {t("shipping_costs")}
+            <div className="flex items-center flex-wrap gap-2">
+              <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="shippingFees">
+                {t("shipping_fees")}
               </Label>
               <Input
-                id="shippingCosts"
+                id="shippingFees"
                 type="number"
                 className="flex-1 min-w-[300px]"
-                placeholder={t("shipping_costs")}
-                value={shippingCosts}
-                onChange={(e) => setShippingCosts(e.target.value)}
+                placeholder={t("shipping_fees")}
+                value={shippingFees}
+                onChange={(e) => setShippingFees(Number(e.target.value))}
               />
-            </div> */}
+            </div>
 
             <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="cityId">

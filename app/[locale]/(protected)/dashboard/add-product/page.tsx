@@ -34,6 +34,7 @@ const AddProduct = () => {
   const [brandId, setBrandId] = useState<string>("");
   const [ProductImage, setProductImage] = useState<File[]>([]);
   const [Price, setPrice] = useState<number>(0);
+    const [sku, setSku] = useState<string>("");
   const [SubCategorySearch, setSubCategorySearch] = useState<string>("");
   const [filteredCategories, setFilteredCategories] = useState<any[]>([]);
   const [brandSearch, setBrandSearch] = useState<string>("");
@@ -89,7 +90,8 @@ const AddProduct = () => {
     formData.append("SubCategoryId", SubCategoryId);
     formData.append("BrandId", brandId);
     formData.append("Price", Price.toString());
-    
+    formData.append("sku", sku.toString());
+
     if (ProductImage.length === 1) {
       formData.append("ProductImage", ProductImage[0]);
     } else if (ProductImage.length > 1) {
@@ -126,7 +128,7 @@ const AddProduct = () => {
           <CardContent className="space-y-4">
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex items-center gap-2">
+              <div >
                 <Label className="w-[120px]">{t("productName")}</Label>
                 <Input value={Name} onChange={(e) => setName(e.target.value)} />
               </div>
@@ -134,11 +136,8 @@ const AddProduct = () => {
                 <Label className="w-[120px]">Price</Label>
                 <Input value={Price} onChange={(e) => setPrice(Number(e.target.value))} />
               </div>
-              {/* <div className="flex items-center gap-2">
-                <Label className="w-[120px]">{t("ArabicName")}</Label>
-                <Input value={ArabicName} onChange={(e) => setArabicName(e.target.value)} />
-              </div> */}
             </div>
+
 
             {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex items-center gap-2">
@@ -152,7 +151,7 @@ const AddProduct = () => {
             </div> */}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex items-center gap-2">
+              <div>
                 <Label className="w-[120px]">{t("category")}</Label>
                 <Select onValueChange={(value) => setSubCategoryId(value)}>
                   <SelectTrigger className="flex-1">
@@ -170,8 +169,12 @@ const AddProduct = () => {
                   </SelectContent>
                 </Select>
               </div>
+              <div >
+                <Label className="w-[120px]">{t("sku")}</Label>
+                <Input value={sku} onChange={(e) => setSku(e.target.value)} />
+              </div>
 
-              <div className="flex items-center gap-2">
+              <div>
                 <Label className="w-[120px]">{t("brand")}</Label>
                 <Select onValueChange={(value) => setBrandId(value)}>
                   <SelectTrigger className="flex-1">
@@ -192,22 +195,7 @@ const AddProduct = () => {
                   </SelectContent>
                 </Select>
               </div>
-            </div>
-
-            {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex items-center gap-2">
-                <Label className="w-[120px]">Revenue Percentage (%)</Label>
-                <Input type="number" value={revenuePercentage} onChange={(e) => setRevenuePercentage(e.target.value)} />
-              </div>
-              <div className="flex items-center gap-2">
-                <Label className="w-[120px]">{t("orderNum")}</Label>
-                <Input type="number" value={orderNum} onChange={(e) => setOrderNum(e.target.value)} />
-              </div>
-            </div> */}
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-2">
+                          <div>
                   <Label className="w-[120px]">{t("productPhoto")}</Label>
                   <Input 
                     type="file" 
@@ -232,8 +220,18 @@ const AddProduct = () => {
                     ))}
                   </div>
                 )}
-              </div>
             </div>
+
+            {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex items-center gap-2">
+                <Label className="w-[120px]">Revenue Percentage (%)</Label>
+                <Input type="number" value={revenuePercentage} onChange={(e) => setRevenuePercentage(e.target.value)} />
+              </div>
+              <div className="flex items-center gap-2">
+                <Label className="w-[120px]">{t("orderNum")}</Label>
+                <Input type="number" value={orderNum} onChange={(e) => setOrderNum(e.target.value)} />
+              </div>
+            </div> */}
 
             <div className="space-y-2">
               <Label>{t("description")}</Label>
