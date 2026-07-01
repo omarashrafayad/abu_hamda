@@ -8,6 +8,7 @@ export type ProductType = {
     productId?: string;
     productArabicName?: string;
     name: string;
+    sku: string;
     arabicName?: string;
     preef?: string;
     arabicPreef?: string;

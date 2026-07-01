@@ -40,6 +40,7 @@ const EditProduct = () => {
     ProductImage: [] as File[],
     Price: "",
     BrandId: "",
+    sku: "",
   });
 
   useEffect(() => {
@@ -49,10 +50,11 @@ const EditProduct = () => {
 useEffect(() => {
   if (product) {
     setFormData({
-      Name: product.productName || "",
+      Name: product.name || "",
       Description: product.description || "",
       SubCategoryId: product.subCategoryId ? String(product.subCategoryId) : "",
       ProductImage: [],
+      sku: product.sku || "",
       Price: product.price ? String(product.price) : "",
       BrandId: product.brandId ? String(product.brandId) : "",
     });
@@ -88,6 +90,7 @@ useEffect(() => {
     data.append("SubCategoryId", formData.SubCategoryId);
     data.append("BrandId", formData.BrandId);
     data.append("Price", formData.Price);
+    data.append("sku", formData.sku);
 
     if (formData.ProductImage.length > 0) {
       if (formData.ProductImage.length === 1) {
@@ -202,6 +205,15 @@ useEffect(() => {
                 className="flex-1 min-w-[300px]"
                 value={formData.Price} 
                 onChange={(e) => setFormData({...formData, Price: e.target.value})} 
+              />
+            </div>
+            <div className="flex items-center flex-wrap gap-2">
+              <Label className="w-[180px] flex-none text-sm font-medium">{t("sku")}</Label>
+              <Input 
+                type="text"
+                className="flex-1 min-w-[300px]"
+                value={formData.sku} 
+                onChange={(e) => setFormData({...formData, sku: e.target.value})} 
               />
             </div>
 

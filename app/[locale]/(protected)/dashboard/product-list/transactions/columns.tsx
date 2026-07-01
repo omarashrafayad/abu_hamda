@@ -153,6 +153,15 @@ export const baseColumns = ({
         </span>
       ),
     },
+          {
+      accessorKey: "sku",
+      header:"sku",
+      cell: ({ row }) => (
+        <span className="text-sm">
+       {row.original.sku ? row.original.sku : "unknown"}
+        </span>
+      ),
+    },
     {
       accessorKey: "subCategoryName",
       header:  "subCategoryName",
