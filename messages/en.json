@@ -462,6 +462,27 @@
     "orderDetailsLoaded": "Order details loaded successfully",
     "orderNumberLabel": "Order Number"
   },
+  "Invoices": {
+    "title": "Invoices",
+    "invoiceNumber": "Invoice Number",
+    "orderNumber": "Order Number",
+    "date": "Date",
+    "subTotal": "Sub Total",
+    "discount": "Discount",
+    "totalAmount": "Total Amount",
+    "actions": "Actions",
+    "viewDetails": "View Details",
+    "invoiceDetails": "Invoice Details",
+    "searchPlaceholder": "Search by invoice number or order ID...",
+    "noInvoices": "No invoices found",
+    "loading": "Loading invoices...",
+    "items": "Items",
+    "itemName": "Item Name",
+    "quantity": "Quantity",
+    "price": "Price",
+    "total": "Total",
+    "close": "Close"
+  },
   "orderDetailsPage": {
     "orderDetails": "Order Details",
     "providerName": "Provider Name",

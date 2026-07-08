@@ -3,96 +3,68 @@ import { Eye } from "lucide-react";
 import { formatDateToDMY } from "@/utils";
 import { Link } from "@/i18n/routing";
 
-const ViewInvoiceAction = ({ row }: { row: any }) => {
-  const invoice = row.original;
-
-  const handleClick = () => {
-    sessionStorage.setItem("selectedInvoice", JSON.stringify(invoice));
-  };
-
-  return (
-    <Link
-      href="/dashboard/reports/invoices/details"
-      onClick={handleClick}
-      className="flex items-center p-2 text-warning hover:text-warning-foreground bg-warning/20 hover:bg-warning duration-200 transition-all rounded-full cursor-pointer"
-      title="View Details"
-    >
-      <Eye className="w-4 h-4" />
-    </Link>
-  );
-};
-
-export const baseColumns = ({refresh} : {refresh: () => void}) : ColumnDef<any>[] => [
+export const baseColumns = ({ t }: { t: any }): ColumnDef<any>[] => [
   {
     accessorKey: "invoiceNumber",
-    header: "Invoice Number",
-    cell: ({ row }) => <span>{row.getValue("invoiceNumber")}</span>,
+    header: t("invoiceNumber"),
+    cell: ({ row }) => (
+      <span className="font-medium text-default-900">
+        {row.original.invoiceNumber}
+      </span>
+    ),
   },
   {
-    accessorKey: "userName",
-    header: "Doctor",
-    cell: ({ row }) => {
-      const name = row.original.userName;
-      return (
-        <div className="font-medium text-card-foreground/80">
-          <span className="text-sm text-default-600 whitespace-nowrap">
-            {name ?? "Unknown User"}
-          </span>
-        </div>
-      );
-    },
+    accessorKey: "orderId",
+    header: t("orderNumber"),
+    cell: ({ row }) => (
+      <span className="font-medium text-default-800">
+        #{row.original.orderId}
+      </span>
+    ),
   },
   {
-    accessorKey: "cashPaid",
-    header: "Cash Paid",
-    cell: ({ row }) => {
-      return <span>{row.getValue("cashPaid")}</span>;
-    },
+    accessorKey: "issuedAt",
+    header: t("date"),
+    cell: ({ row }) => (
+      <span className="text-default-600">{formatDateToDMY(row.original.issuedAt)}</span>
+    ),
   },
   {
-    accessorKey: "creditUsed",
-    header: "Credit Used",
-    cell: ({ row }) => {
-      return <span>{row.getValue("creditUsed")}</span>;
-    },
-  },  {
-    accessorKey: "coupon",
-    header: "coupon",
-    cell: ({ row }) => {
-      return <span>{row.getValue("coupon")}</span>;
-    },
-  },  {
-    accessorKey: "shippingFees",
-    header: "Shipping Fees",
-    cell: ({ row }) => {
-      return <span>{row.getValue("shippingFees")}</span>;
-    },
+    accessorKey: "subTotal",
+    header: t("subTotal"),
+    cell: ({ row }) => (
+      <span className="font-mono text-default-700">{row.original.subTotal}</span>
+    ),
   },
   {
-    accessorKey: "totalAmountAfter",
-    header: "Total Amount",
-    cell: ({ row }) => {
-      return <span>{row.getValue("totalAmountAfter")}</span>;
-    },
+    accessorKey: "discountAmount",
+    header: t("discount"),
+    cell: ({ row }) => (
+      <span className={row.original.discountAmount > 0 ? "text-success font-semibold font-mono" : "text-muted-foreground font-mono"}>
+        {row.original.discountAmount}
+      </span>
+    ),
   },
   {
-    accessorKey: "invoiceDate",
-    header: "Invoice Date",
-    cell: ({ row }) => {
-      return <span>{formatDateToDMY(row.original.invoiceDate)}</span>;
-    },
+    accessorKey: "totalAmount",
+    header: t("totalAmount"),
+    cell: ({ row }) => (
+      <span className="font-bold text-primary font-mono">{row.original.totalAmount}</span>
+    ),
   },
   {
     id: "actions",
-    accessorKey: "action",
-    header: "Actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      return (
-        <div className="flex items-center gap-1">
-          <ViewInvoiceAction row={row} />
-        </div>
-      );
-    },
+    header: t("actions"),
+    cell: ({ row }) => (
+      <div className="flex items-center justify-center py-1">
+        <Link
+          href={`/dashboard/reports/invoices/${row.original.id}`}
+          className="flex items-center p-1.5 text-warning hover:text-warning-foreground bg-warning/20 hover:bg-warning duration-200 transition-all rounded-full cursor-pointer"
+          title={t("viewDetails")}
+        >
+          <Eye className="w-3.5 h-3.5" />
+        </Link>
+      </div>
+    ),
   },
 ];

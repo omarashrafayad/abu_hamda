@@ -447,6 +447,27 @@
     "orderDetailsLoaded": "تم تحميل تفاصيل الطلب بنجاح",
     "orderNumberLabel": "رقم الطلب"
   },
+  "Invoices": {
+    "title": "الفواتير",
+    "invoiceNumber": "رقم الفاتورة",
+    "orderNumber": "رقم الطلب",
+    "date": "التاريخ",
+    "subTotal": "المجموع الفرعي",
+    "discount": "الخصم",
+    "totalAmount": "المبلغ الإجمالي",
+    "actions": "الإجراءات",
+    "viewDetails": "عرض التفاصيل",
+    "invoiceDetails": "تفاصيل الفاتورة",
+    "searchPlaceholder": "البحث برقم الفاتورة أو رقم الطلب...",
+    "noInvoices": "لا توجد فواتير",
+    "loading": "جاري تحميل الفواتير...",
+    "items": "العناصر",
+    "itemName": "اسم المنتج",
+    "quantity": "الكمية",
+    "price": "السعر",
+    "total": "الإجمالي",
+    "close": "إغلاق"
+  },
   "orderDetailsPage": {
     "orderDetails": "تفاصيل الطلب",
     "providerName": "اسم المورد",
