@@ -127,7 +127,7 @@ export default function TransactionsTable() {
       <div className="px-5 py-4 flex flex-col md:flex-row items-center gap-4">
         <div className="w-full md:w-auto flex-1">
           <Input
-            placeholder={t("searchPlaceholder") || "Search by order ID..."}
+            placeholder={"Search by order Number"}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="max-w-sm"
